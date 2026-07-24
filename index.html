@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marginalia — Attention Is All You Need</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="#" class="site-mark">Marginalia <small>/ papers</small></a>
+      <nav class="site-nav">
+        <a href="#">Home</a>
+        <a href="#">Papers</a>
+        <a href="#">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">// research notebook</p>
+      <h1>Reading papers so the ideas make sense out loud.</h1>
+      <p>Plain-language breakdowns, worked out in full.</p>
+    </div>
+  </section>
+
+  <main>
+    <article class="post-main">
+      <div class="post-meta">
+        <span>2026.07.18</span>
+        <span>12 min read</span>
+        <span>Machine Learning</span>
+      </div>
+      <h1 class="post-title">Attention Is All You Need — what the transformer actually computes</h1>
+      <p class="post-source">Breaking down Vaswani et al., 2017 — the paper that introduced the transformer architecture.</p>
+
+      <div class="callout">
+        <p class="callout__label">Original abstract, condensed</p>
+        <p>A network built entirely on attention, with no recurrence or convolutions — trained faster than prior models because attention parallelizes where recurrence can't.</p>
+      </div>
+
+      <h2>Self-attention, worked out</h2>
+      <p>Every token produces a query <code class="inline">Q</code>, key <code class="inline">K</code>, and value <code class="inline">V</code>. A token's new representation is a weighted sum of every value, where weights come from comparing its query against every key.</p>
+
+      <div class="math-row">
+        <div class="math-block-wrap" id="eq-attention"></div>
+        <p style="font-size:0.78rem; color:var(--ink-soft); font-family:var(--font-ui); margin:0;">
+          the <span id="eq-scale-inline"></span> term stabilizes gradients as <em>d<sub>k</sub></em> grows.
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block__bar">
+          <span class="code-block__lang">python</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code><span class="tok-kw">def</span> <span class="tok-fn">attention</span>(Q, K, V):
+    d_k = Q.shape[-<span class="tok-num">1</span>]
+    scores = Q @ K.T / np.sqrt(d_k)
+    <span class="tok-kw">return</span> <span class="tok-fn">softmax</span>(scores) @ V</code></pre>
+      </div>
+
+      <div class="callout callout--takeaway">
+        <p class="callout__label">Key takeaway</p>
+        <p>Multi-head attention isn't about more capacity — each head specializes on a different relationship in the sequence.</p>
+      </div>
+
+      <div class="citations">
+        <h2>Citations</h2>
+        <ol>
+          <li>Vaswani, A. et al. (2017). Attention Is All You Need. <em>NeurIPS</em>.</li>
+        </ol>
+      </div>
+
+      <div class="post-tags">
+        <span class="tag-chip">ML</span>
+        <span class="tag-chip">NLP</span>
+        <span class="tag-chip">Transformers</span>
+      </div>
+    </article>
+
+    <aside class="margin-notes" aria-label="Margin notes">
+      <div class="margin-note margin-note--accent">
+        <span class="margin-note__label">Definition</span>
+        <p>Softmax turns raw scores into a probability distribution summing to 1.</p>
+      </div>
+      <div class="margin-note margin-note--brick">
+        <span class="margin-note__label">Key takeaway</span>
+        <p>Parallel comparison replaces sequential processing — the core reason transformers train faster than RNNs.</p>
+      </div>
+      <div class="margin-note margin-note--accent">
+        <span class="margin-note__label">Notation</span>
+        <p><em>d<sub>k</sub></em> = 64 in the base transformer, across 8 heads.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">Marginalia — a research notebook. Built by hand, one paper at a time.</div>
+  </footer>
+
+</div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="js/main.js"></script>
+</body>
+</html>
