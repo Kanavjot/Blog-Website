@@ -7,8 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
 <div class="page">
@@ -20,15 +22,41 @@
         <a href="#">Home</a>
         <a href="#">Papers</a>
         <a href="#">About</a>
+        <label class="theme-switch" aria-label="Toggle light and dark mode">
+          <input type="checkbox" id="theme-toggle">
+          <span class="theme-switch__track">
+            <span class="theme-switch__thumb">
+              <span class="theme-switch__icon icon-sun">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="4"/>
+                  <line x1="12" y1="2" x2="12" y2="4"/>
+                  <line x1="12" y1="20" x2="12" y2="22"/>
+                  <line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/>
+                  <line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/>
+                  <line x1="2" y1="12" x2="4" y2="12"/>
+                  <line x1="20" y1="12" x2="22" y2="12"/>
+                  <line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/>
+                  <line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/>
+                </svg>
+              </span>
+              <span class="theme-switch__icon icon-moon">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                  <path d="M20.7 15.6A9 9 0 1 1 8.4 3.3a7 7 0 0 0 12.3 12.3z"/>
+                </svg>
+              </span>
+            </span>
+          </span>
+        </label>
       </nav>
+    </div>
+
+    <div id="progress-bar">
     </div>
   </header>
 
   <section class="hero">
     <div class="hero__inner">
-      <p class="hero__eyebrow">// research notebook</p>
-      <h1>Reading papers so the ideas make sense out loud.</h1>
-      <p>Plain-language breakdowns, worked out in full.</p>
+      <h1 style="border-right: 2px solid #ccc;border-left: 2px solid #ccc; padding-right: 10px; margin-right: 10px;"class="hero__inner">Research Notebook</h1>
     </div>
   </section>
 
@@ -36,18 +64,38 @@
     <article class="post-main">
       <div class="post-meta">
         <span>2026.07.18</span>
-        <span>12 min read</span>
+        <span>3 min read</span>
         <span>Machine Learning</span>
       </div>
-      <h1 class="post-title">Attention Is All You Need — what the transformer actually computes</h1>
-      <p class="post-source">Breaking down Vaswani et al., 2017 — the paper that introduced the transformer architecture.</p>
+      <span class="difficulty difficulty--intermediate">Intermediate</span>
+      <h1 class="post-title">Attention Is All You Need</h1>
+      <p class="post-source">Breaking down Vaswani et al., 2017. The paper that introduced transformer architecture to the world</p>
 
       <div class="callout">
-        <p class="callout__label">Original abstract, condensed</p>
-        <p>A network built entirely on attention, with no recurrence or convolutions — trained faster than prior models because attention parallelizes where recurrence can't.</p>
+        <p class="callout__label">Original abstract</p>
+        <p>The dominant sequence transduction models are based on complex recurrent or
+        convolutional neural networks that include an encoder and a decoder. The best
+        performing models also connect the encoder and decoder through an attention
+        mechanism. We propose a new simple network architecture, the Transformer,
+        based solely on attention mechanisms, dispensing with recurrence and convolutions
+        entirely. Experiments on two machine translation tasks show these models to
+        be superior in quality while being more parallelizable and requiring significantly
+        less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English
+        to-German translation task, improving over the existing best results, including
+        ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task,
+        our model establishes a new single-model state-of-the-art BLEU score of 41.8 after
+        training for 3.5 days on eight GPUs, a small fraction of the training costs of the
+        best models from the literature. We show that the Transformer generalizes well to
+        other tasks by applying it successfully to English constituency parsing both with
+        large and limited training data.</p>
       </div>
+      
+      <div>
+        <h2 id = "plain-terms">Abstract in Plain Terms</h2>
+        <p>The paper introduces the Transformer, a new architecture that completely replaces recurrence and <span class="term" data-tooltip="Neural network layers that scan local patches of input, commonly used in image processing.">convolutions</span> with a self-attention mechanism.</p>
+      
 
-      <h2>Self-attention, worked out</h2>
+      <h2 id = "self-attention">Self-attention, worked out</h2>
       <p>Every token produces a query <code class="inline">Q</code>, key <code class="inline">K</code>, and value <code class="inline">V</code>. A token's new representation is a weighted sum of every value, where weights come from comparing its query against every key.</p>
 
       <div class="math-row">
@@ -62,15 +110,16 @@
           <span class="code-block__lang">python</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code><span class="tok-kw">def</span> <span class="tok-fn">attention</span>(Q, K, V):
-    d_k = Q.shape[-<span class="tok-num">1</span>]
-    scores = Q @ K.T / np.sqrt(d_k)
-    <span class="tok-kw">return</span> <span class="tok-fn">softmax</span>(scores) @ V</code></pre>
+        <pre class="language-python"><code class="language-python">def attention(Q, K, V):
+          d_k = Q.shape[-1]
+          scores = Q @ K.T / np.sqrt(d_k)
+          return softmax(scores) @ V</code>
+        </pre>
       </div>
 
       <div class="callout callout--takeaway">
         <p class="callout__label">Key takeaway</p>
-        <p>Multi-head attention isn't about more capacity — each head specializes on a different relationship in the sequence.</p>
+        <p>Multi-head attention isn't just about adding raw capacity to the network. Instead, it lets the model project inputs into different subspaces at the same time, allowing each head to specialize in tracking a unique type of relationship across the sequence.</p>
       </div>
 
       <div class="citations">
@@ -88,6 +137,10 @@
     </article>
 
     <aside class="margin-notes" aria-label="Margin notes">
+      <nav class="toc" aria-label="Table of contents">
+        <span class="toc__label">On this page</span>
+        <ul id="toc-list"></ul>
+      </nav>
       <div class="margin-note margin-note--accent">
         <span class="margin-note__label">Definition</span>
         <p>Softmax turns raw scores into a probability distribution summing to 1.</p>
@@ -104,12 +157,14 @@
   </main>
 
   <footer class="site-footer">
-    <div class="wrap">Marginalia — a research notebook. Built by hand, one paper at a time.</div>
+    <div class="wrap">Marginalia | Reading between the margins</div>
   </footer>
 
 </div>
 
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 <script defer src="js/main.js"></script>
 </body>
 </html>
