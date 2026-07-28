@@ -17,10 +17,10 @@
 
   <header class="site-header">
     <div class="site-header__inner">
-      <a href="#" class="site-mark">Marginalia <small>/ papers</small></a>
+      <a href="index.html" class="site-mark">Marginalia <small>/ papers</small></a>
       <nav class="site-nav">
-        <a href="#">Home</a>
-        <a href="#">Papers</a>
+        <a href="index.html">Home</a>
+        <a href="papers.html">Papers</a>
         <a href="updates.html">Updates</a>
         <a href="#">About</a>
         <label class="theme-switch" aria-label="Toggle light and dark mode">
@@ -94,7 +94,7 @@
       <div>
         <h2 id = "plain-terms">Abstract in Plain Terms</h2>
         <p>The paper introduces the Transformer, a new architecture that completely replaces recurrence and <span class="term" data-tooltip="Neural network layers that scan local patches of input, commonly used in image processing.">convolutions</span> with a self-attention mechanism.</p>
-      
+      </div>
 
       <h2 id = "self-attention">Self-attention, worked out</h2>
       <p>Every token produces a query <code class="inline">Q</code>, key <code class="inline">K</code>, and value <code class="inline">V</code>. A token's new representation is a weighted sum of every value, where weights come from comparing its query against every key.</p>
@@ -118,6 +118,8 @@
         </pre>
       </div>
 
+
+      
       <div class="callout callout--takeaway">
         <p class="callout__label">Key takeaway</p>
         <p>Multi-head attention isn't just about adding raw capacity to the network. Instead, it lets the model project inputs into different subspaces at the same time, allowing each head to specialize in tracking a unique type of relationship across the sequence.</p>
