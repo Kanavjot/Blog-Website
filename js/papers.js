@@ -2,8 +2,59 @@
 
 const searchInput = document.getElementById("search-input");
 const filterBtns = document.querySelectorAll(".pill");
-const entries = document.querySelectorAll(".entry");
+let entries = document.querySelectorAll(".entry");
 const noResults = document.getElementById("no-results");
+
+let allPapers = []
+
+async function loadPapers() {
+  try {
+    const res = await fetch("/api/papers");
+    if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+    const data = await res.json();
+    allPapers = data;
+    renderPapers(allPapers);
+  } catch (err) {
+    console.error("Failed to load papers:", err);
+  }
+}
+
+function renderPapers(papers) {
+    const list = document.getElementById("papersList");
+    list.innerHTML = "";
+    papers.forEach((paper) => {
+        const li = document.createElement("li");
+        li.className = paper.link ? "entry" : "entry entry-soon";
+        li.dataset.tags = paper.tags.replace(/\s/g, "");
+        li.dataset.difficulty = paper.difficulty;
+
+        const tagsHtml = paper.tags.split(",").map(t => `<span class = "tag-chip">${t.trim()}</span>`).join("");
+
+        const innerHtml = `
+            <div class="entry-meta">
+                <span> ${paper.date || "Coming Soon"} </span>
+                <span> ${paper.read_time}</span>
+                <span class = "difficulty difficulty--${paper.difficulty}"> ${paper.difficulty}</span>
+            </div>
+            <h2 class="entry-title">${paper.title}</h2>
+            <p class = "entry-summary">${paper.summary}</p>
+            <div class="entry-tags">
+                ${tagsHtml}
+            </div>
+        `;
+
+        if (paper.link) {
+            li.innerHTML = `<a href="${paper.link}">${innerHtml}</a>`;
+        } else {
+            li.innerHTML = innerHtml;
+        }
+
+        list.appendChild(li);
+    });
+        entries = document.querySelectorAll(".entry");
+    }
+
+loadPapers();
 
 let tagFilter = "all";
 let diffFilter = "all";

@@ -96,34 +96,95 @@
         <p>The paper introduces the Transformer, a new architecture that completely replaces recurrence and <span class="term" data-tooltip="Neural network layers that scan local patches of input, commonly used in image processing.">convolutions</span> with a self-attention mechanism.</p>
       </div>
 
+      
+
       <h2 id = "self-attention">Self-attention, worked out</h2>
       <p>Every token produces a query <code class="inline">Q</code>, key <code class="inline">K</code>, and value <code class="inline">V</code>. A token's new representation is a weighted sum of every value, where weights come from comparing its query against every key.</p>
+
+      
+
+      <div class="math-block-wrap" data-katex= "\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V" ></div>
 
       <div class="math-row">
         <div class="math-block-wrap" id="eq-attention"></div>
         <p style="font-size:0.78rem; color:var(--ink-soft); font-family:var(--font-ui); margin:0;">
-          the <span id="eq-scale-inline"></span> term stabilizes gradients as <em>d<sub>k</sub></em> grows.
+          the <span data-katex-inline="\frac{1}{\sqrt{d_k}}"></span> term stabilizes as <em>d<sub>k</sub></em> grows.
         </p>
       </div>
 
-      <div class="code-block">
+      <h2 id = "scaling-factor"> Why does the scaling factor matter?</h2>
+
+      <p>Without the scaling factor, as <span data-katex-inline = "d_k"></span> grows large, the<span class="term" data-tooltip="Operation which multiplies vector values to measure similarity."> dot products</span> increase in magnitude. This pushes the<span class = "term" data-tooltip="An equation which turns converts raw numerical scores into probabilities that add up to 100%" > softmax </span> function into regions with extremely small gradients, making the training unstable or slow</p>
+      <p> Small values of dₖ: Unscaled dot products perform fine and help maintain stable gradients during training.</p>
+      <p> Large values of dₖ: Scaling the dot products prevents them from becoming too large, maintaining stable gradients. It ensures healthy gradient flow during<span class="term" data-tooltip="An issue during training where the updates to the wieghts of a neural network become exponentially small. This halts learning."> backpropagation. </span></p>
+
+      <h2 id = "multi-head-attention">Multi-Head Attention</h2>
+
+      <p> Single-head attention allows a token to gather context from the rest of the sequence. Multi-head attention extends this by running the attention mechanism multiple times in parallel with different <span class = "term" data-tooltip="Multiplying data matrices by learned weight matrices to change their shape or extract new features"></span> linear projections.</p>
+
+      <div class ="code-block">
         <div class="code-block__bar">
           <span class="code-block__lang">python</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre class="language-python"><code class="language-python">def attention(Q, K, V):
-          d_k = Q.shape[-1]
-          scores = Q @ K.T / np.sqrt(d_k)
-          return softmax(scores) @ V</code>
+        <pre class="language-python"><code class="language-python">def multi_head_attention(Q,K,V,h, W_Q, W_K, W_V, W_O):
+  heads = []
+  for i in range(h):
+    Q_i = Q @ W_Q[i]
+    K_i = K @ W_K[i]
+    V_i = V @ W_V[i]
+    heads.append(attention(Q_i, K_i, V_i))
+
+  concat = np.cocatenate(heads,axis=-1)
+
+  return concat @ W_O
+          </code>
         </pre>
       </div>
 
+      <h2 id = "positional-encoding"> Positional Encoding </h2>
 
+      <p>Self-attention processes all tokens in parllel using <span class = "term" data-tooltip="Math operations performed on grids of numbers all at once.">matrix operations</span>. Due to this, it has no innate sense of sequence order or position. To fix this,<span class = "term" data-tooltip="Number vectors added to word vectors to give the model info about word order in a sequence.">positional encodings </span> are added to the <span class = "term" data-tooltip="Vector representations where words with similar meaning are stored closely together mathematically.">input embeddings</span> before entering the attention blocks.</p>
       
+      <!-- Add math equations for positional encoding here -->
+
+      <h2 id = "encoder-vs-decoder">Encoder vs Decoder</h2>
+      <table class = "research-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Encoder</th>
+            <th>Decoder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Input</strong></td>
+            <td>Source Sequence</td>
+            <td>Target Sequence (shifted to the right)</td>
+          </tr>
+          <tr>
+            <td><strong> Attention Type</strong></td>
+            <td> Full bi-directional self-attention</td>
+            <td> Casual(masked) self attention + Cross Attention</td>
+            
+          </tr>
+
+          <tr>
+            <td><strong>Purpose</strong></td>
+            <td> Builds deep contextual representations</td>
+            <td> Generates output token auto-regressively</td>
+          </tr>
+        </tbody>
+      </table>
+      
+
       <div class="callout callout--takeaway">
         <p class="callout__label">Key takeaway</p>
-        <p>Multi-head attention isn't just about adding raw capacity to the network. Instead, it lets the model project inputs into different subspaces at the same time, allowing each head to specialize in tracking a unique type of relationship across the sequence.</p>
+        <p>Multi-head attention isn't just about adding raw capacity to the network. Instead, it lets the model project inputs into different <span class = "term" data-tooltip="Low dimensional areas where a model can pay attention to specific areas">subspaces</span> at the same time, allowing each head to specialize in tracking a unique type of relationship across the sequence.</p>
       </div>
+
+
 
       <div class="citations">
         <h2>Citations</h2>

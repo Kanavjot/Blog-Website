@@ -1,32 +1,44 @@
 window.addEventListener("load", () => {
   // Render LaTeX
-  katex.render(
-    "\\text{Attention}(Q,K,V)=\\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V",
-    document.getElementById("eq-attention"),
-    { displayMode: true }
-  );
-  katex.render("\\frac{1}{\\sqrt{d_k}}", document.getElementById("eq-scale-inline"));
+  const blockEls = document.querySelectorAll("[data-katex]");
+  console.log("Found block-katex elements:", blockEls.length);
+  blockEls.forEach((el) => {
+    try {
+      katex.render(el.dataset.katex, el, { displayMode: true });
+    } catch (err) {
+      console.error("Block KaTeX failed for:", el.dataset.katex, err);
+    }
+  });
+
+  const inlineEls = document.querySelectorAll("[data-katex-inline]");
+  console.log("Found inline-katex elements:", inlineEls.length);
+  inlineEls.forEach((el) => {
+    try {
+      katex.render(el.dataset.katexInline, el);
+    } catch (err) {
+      console.error("Inline KaTeX failed for:", el.dataset.katexInline, err);
+    }
+  });
 
   const themeToggle = document.getElementById("theme-toggle");
 
-function setTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  themeToggle.checked = theme === "dark";
-}
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    themeToggle.checked = theme === "dark";
+  }
 
-// on load — reuse your existing saved/prefersLight logic, just call setTheme instead
-const saved = localStorage.getItem("theme");
-const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-setTheme(saved || (prefersLight ? "light" : "dark"));
+  const saved = localStorage.getItem("theme");
+  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+  setTheme(saved || (prefersLight ? "light" : "dark"));
 
-themeToggle.addEventListener("change", () => {
-  const next = themeToggle.checked ? "dark" : "light";
-  setTheme(next);
-  localStorage.setItem("theme", next);
-});
-
+  themeToggle.addEventListener("change", () => {
+    const next = themeToggle.checked ? "dark" : "light";
+    setTheme(next);
+    localStorage.setItem("theme", next);
   });
-  // Copy-to-clipboard
+
+});
+  // Copy to clipboard
   document.querySelectorAll(".copy-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const codeEl = btn.closest(".code-block").querySelector("code");
@@ -62,7 +74,9 @@ function updateProgressBar() {
 window.addEventListener("scroll", updateProgressBar);
 window.addEventListener("resize", updateProgressBar);
 
-// Highlight whichever section is currently in view
+
+
+// Highlight viewed section in TOC
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -139,3 +153,5 @@ function toggleSublist(toggle, sublist) {
 }
 
 document.querySelectorAll(".post-main h2[id], .post-main h3[id]").forEach((h) => observer.observe(h));
+
+

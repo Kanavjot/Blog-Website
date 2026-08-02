@@ -220,6 +220,33 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .toc a:hover { color: var(--ink); }
 .toc a.active { color: var(--accent); border-left-color: var(--accent); }
 
+.research-table{
+  width:100%;
+  border-collapse : collapse ;
+  margin: 1.5rem 0;
+  color: #e2e8f0;
+  font-family: inherit;
+  text-align: left;
+}
+
+.research-table td{
+  padding: 0.75 rem 1rem;
+  border-bottom : 1px solid #1e293b;
+  vertical-align: top;
+  line-height:1.5;
+}
+
+.research table th{
+  padding : 1rem;
+  border-bottom: 1px solid #334155;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.research-table tr:hover {
+  background-color: rgba(255,255,255,0.02);
+}
+
 /*   HERO (compact strip)   */
 .hero {
   flex: 0 0 auto;
