@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Marginalia — Admin</title>
+        <link href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <link rel = "stylesheet" href="css/styles.css">
+        <style>
+            .admin-wrap{
+                max-width: 40rem;
+                margin: 2rem auto;
+                padding: 0 1.3rem;
+                font-family: var(--font-ui);
+
+            }
+            .admin-wrap h1{
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .field{
+                margin-bottom: 1rem;
+
+            }
+
+            .field label{
+                display: block;
+                font-size: 0.82rem;
+                color: var(--ink-soft);
+                margin-bottom: 0.3rem;
+            }
+
+
+            .field input, .field select, .field textarea{
+                width: 100%;
+                padding: 0.5rem 0.7rem;
+                border: 1px solid var(--rule-strong);
+                border-radius: var(--radius);
+                font-size: 0.9rem;
+                font-family: var(--font-ui);
+                color: var(--ink);
+                background: var(--bg-raised);
+            }
+
+            .field textarea{
+                min-height: 4rem;
+                resize: vertical;
+            }
+            .submit-btn{
+                font-family: var(--font-ui);
+                font-size: 0.9rem;
+                padding: 0.55rem 1.2rem;
+                border: none;
+                border-radius: var(--radius);
+                background: var(--accent);
+                color: var(--bg-raised);
+                cursor: pointer;
+            }
+
+            #status {
+                margin-top: 1rem;
+                font-size: 0.85rem;
+            }
+            #status.success {
+                color: var(--accent);
+            }
+            #status.error {
+                color: var(--brick);
+            }
+        </style>
+    </head>
+    <body>
+        <div class = "admin-wrap">
+            <h1>Admin Panel</h1>
+            <form id = "paper-form">
+                <div class="field">
+                    <label for="title">Title *</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="field">
+                    <label for="tags">Tags (comma-separated)</label>
+                    <input type="text" id="tags" placeholder = "ml, nlp, transformers" required>
+                </div>
+                <div class="field">
+                    <label for="difficulty">Difficulty</label>
+                    <select id="difficulty" required>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="summary">Summary</label>
+                    <textarea id="summary"></textarea>
+                </div>
+                <div class="field">
+                    <label for="read_time">Read Time (in minutes)</label>
+                    <input type="text" id="read_time" placeholder = "5 min read">
+                </div>
+                <div class="field">
+                    <label for="date">Date</label>
+                    <input type="text" id="date" placeholder = "2026-08-01">
+                </div>
+                <div class="field">
+                    <label for="link">Link (leave blank for "Coming Soon")</label>
+                    <input type="text" id="link" placeholder = "index.html">
+                </div>
+
+                <button type="submit" class = "submit-btn">Add Paper</button>
+                <p id = "status"></p>
+            </form>
+        </div>
+        <script src = "js/admin.js"></script>
+    </body>
+</html>
