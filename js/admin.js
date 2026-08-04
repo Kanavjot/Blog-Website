@@ -38,3 +38,34 @@ form.addEventListener("submit", async (e) => {
         statusEl.className = "error";
     }
 });
+
+async function loadAdminPapers() {
+    const res = await fetch("/api/papers");
+    const papers = await res.json();
+    const container = document.getElementById("papers-list");
+    container.innerHTML = "";
+    papers.forEach((paper) => {
+        const row = document.createElement("div");
+        row.style.cssText = "display:flex;align-items:center; justify-content:space-between; border-bottom: 1px solid var(--rule); padding: 0.6rem 0";
+        row.innerHTML = `
+            <span style = "font-size: 0.9rem; color:var(--ink);">${paper.title} </span>
+            <button data-id = "${paper.id}" style = "background: var(--brick); color: var(--bg-raised); border: none; padding: 0.3rem 0.7rem; border-radius: var(--radius);font-size: 0.8rem; cursor:pointer;">Delete</button>
+        `;
+        container.appendChild(row);
+    });
+    
+    container.querySelectorAll("button").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const id = btn.dataset.id;
+            if (!confirm("Delete this paper?")) return;
+            const res = await fetch(`/api/papers/${id}`, { method: "DELETE" });
+            if (res.ok) {
+                loadAdminPapers();
+            } else {
+                alert("Failed to Delete");
+            }
+        });
+    });
+}
+
+loadAdminPapers();  

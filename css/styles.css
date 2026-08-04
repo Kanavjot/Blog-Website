@@ -220,32 +220,26 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .toc a:hover { color: var(--ink); }
 .toc a.active { color: var(--accent); border-left-color: var(--accent); }
 
-.research-table{
-  width:100%;
-  border-collapse : collapse ;
+table {
+  width: 100%;
   margin: 1.5rem 0;
-  color: #e2e8f0;
-  font-family: inherit;
+  color: var(--ink);
+  border-collapse: collapse;
+}
+
+th , td{
+  border: 1px solid var(--rule);
+  padding: 0.75rem 1rem;
   text-align: left;
 }
 
-.research-table td{
-  padding: 0.75 rem 1rem;
-  border-bottom : 1px solid #1e293b;
-  vertical-align: top;
-  line-height:1.5;
-}
-
-.research table th{
-  padding : 1rem;
-  border-bottom: 1px solid #334155;
+th{
+  background-color: var(--bg-raised);
+  color: var(--ink);
   font-weight: 600;
-  color: #ffffff;
 }
 
-.research-table tr:hover {
-  background-color: rgba(255,255,255,0.02);
-}
+tr:nth-child(even) { background-color: var(--bg-raised); }
 
 /*   HERO (compact strip)   */
 .hero {

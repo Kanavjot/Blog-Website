@@ -82,6 +82,15 @@ app.post("/api/papers", requireLogin, (req, res) => {
   res.status(201).json(newPaper);
 });
 
+app.delete("/api/papers/:id", requireLogin, (req, res) => {
+  const { id } = req.params;
+  const existing = db.prepare("SELECT * FROM papers WHERE id = ?").get(id);
+  if (!existing) {
+    return res.status(404).json({ error: "Paper not found" });
+  }
+  db.prepare ("DELETE FROM papers WHERE id = ?").run(id);
+  res.json({ success: true, deleted: existing });
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {
