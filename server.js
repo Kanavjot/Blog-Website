@@ -15,7 +15,7 @@ app.use(session({
   cookie: {maxAge: 1000 * 60 * 60 * 4} // 4 hrs
 }));
 
-const ADMIN_PASSWORD = "Vanak@12345";
+const ADMIN_PASSWORD = "Vanak@123452417";
 function requireLogin(req, res, next) {
   if (req.session.loggedIn) {
     next();
@@ -43,58 +43,65 @@ app.get("/api/session-check", (req, res) => {
 });
 
 
-app.get("/api/papers", (req, res) => {
-  const papers = db.prepare("SELECT * FROM papers ORDER BY id DESC").all();
-  res.json(papers);
+app.get("/api/papers", async(req,res) => {
+  try{
+    const result = await db.query("SELECT * FROM papers ORDER BY id DESC");
+    res.json(result.rows);
+  }catch(err) {
+    console.error("GET /api/papers error:", err);
+    res.status(500).json({error: "Database error"}); 
+  }
+})
+
+app.post("/api/papers", requireLogin, async(req, res) => {
+  const{title, tags, difficulty, summary, read_time, date, link} = req.body;
+  if (!title || !title.trim()) return res.status(400).json({error: "Title is required"});
+  if(!tags || !tags.trim()) return res.status(400).json({error : "Tags are required"})
+  if(!["beginner", "intermediate", "advanced"].includes(difficulty)) {
+    return res.status(400).json({error: "Invalid Difficulty"});
+  }
+
+  try{
+    const query = `INSERT INTO papers (title, tags, difficulty, summary, read_time , date , link)
+    VALUES ($1, $2, $3 , $4 , $5 , $6 , $7)
+    RETURNING *`;
+
+    const values = [
+      title.trim(),
+      tags.trim(),
+      difficulty,
+      summary ? summary.trim() : "",
+      read_time ? read_time.trim() : "",
+      date ? date.trim() : "",
+      link ? link.trim() : ""
+    ];
+
+    const {rows} = await db.query(query, values);
+    res.status(201).json(rows[0])
+  } catch(err){
+    console.error(err);
+    res.status(500).json({error: "Failed to create paper"});
+  }
 });
 
-app.post("/api/papers", requireLogin, (req, res) => {
-  const{title,tags,difficulty,summary,read_time,date,link} = req.body;
-
-  if(!title|| !title.trim()){
-    return res.status(400).json({ error: "Title is required" });
+app.delete("/api/papers/:id" , requireLogin, async(req,res) => {
+  try{
+    const {rows} = await db.query("DELETE FROM papers WHERE id = $1 RETURNING *", [req.params.id]);
+    if (rows.length === 0){
+      return res.status(404).json({error : "Paper not found"});
+    }
+  res.json({success : true , deleted : rows[0]});
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({error: "Failed to delete paper"});
   }
-  if(!tags|| !tags.trim()){
-    return res.status(400).json({ error: "Tags are required" });
-  }
-  if(!["beginner","intermediate","advanced"].includes(difficulty)){
-    return res.status(400).json({ error: "Difficulty must be one of: beginner, intermediate, advanced" });
-  }
-
-  const insert = db.prepare(`
-    INSERT INTO papers (title, tags, difficulty, summary, read_time, date, link)
-    VALUES (@title, @tags, @difficulty, @summary, @read_time, @date, @link)
-  `);
-
-  const result = insert.run({
-    title:title.trim(),
-    tags:tags.trim(),
-    difficulty,
-    summary:summary? summary.trim():"",
-    read_time:read_time? read_time.trim():"",
-    date:date? date.trim():"",
-    link:link? link.trim():""
-
-
-  })
-
-  const newPaper = db.prepare("SELECT * FROM papers WHERE id = ?").get(result.lastInsertRowid);
-  res.status(201).json(newPaper);
 });
 
-app.delete("/api/papers/:id", requireLogin, (req, res) => {
-  const { id } = req.params;
-  const existing = db.prepare("SELECT * FROM papers WHERE id = ?").get(id);
-  if (!existing) {
-    return res.status(404).json({ error: "Paper not found" });
-  }
-  db.prepare ("DELETE FROM papers WHERE id = ?").run(id);
-  res.json({ success: true, deleted: existing });
-});
 
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =>{
+  console.log(`Server running on port ${PORT}`);
+})
+
 
 

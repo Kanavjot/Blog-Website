@@ -326,6 +326,33 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   color: var(--ink-faint);
 }
 
+.hero-home{
+  margin-bottom: 2.5rem;
+}
+
+.hero-tagline{
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08rem;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.hero-home h1{
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height:1.2;
+  margin: 0 0 0.8rem;
+}
+
+.hero-desc{
+  color: var(--ink-soft);
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+
+
 /*   MAIN (fills remaining space)   */
 main {
   flex: 1 1 auto;

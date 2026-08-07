@@ -1,235 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marginalia — Attention Is All You Need</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
-</head>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name = "viewport" content = "width = device-width , initial-scale=1.0">
+        <title>Marginalia - Research Notebook</title>
+        <link rel = "preconnect" href = "https://fonts.googleapis.com">
+        <link rel = "preconnect" href = "https://fonts.gstatic.com" crossorigin>
+        <link href = "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <link href = "https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;1,400&display=swap" rel = "stylesheet">
+        <link rel = "stylesheet" href = "css/styles.css">
+
+    </head>
 <body>
-<div class="page">
+    <div class = "page">
+        <header class = "site-header">
+            <div class="site-header__inner">
+                <a href="index.html" class="site-mark">Marginalia</a>
+                <nav class="site-nav">
+                    <a href="index.html">Home</a>
+                    <a href="papers.html">Papers</a>
+                    <a href="updates.html">Updates</a>
+                    <a href="login.html" class = "nav-admin">Admin</a>
+                    <a href="about.html">About</a>
+                    <label class="theme-switch" aria-label="Toggle light and dark mode">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="theme-switch__track">
+                        <span class="theme-switch__thumb">
+                        <span class="theme-switch__icon icon-sun">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="12" y1="2" x2="12" y2="4"/>
+                            <line x1="12" y1="20" x2="12" y2="22"/>
+                            <line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/>
+                            <line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/>
+                            <line x1="2" y1="12" x2="4" y2="12"/>
+                            <line x1="20" y1="12" x2="22" y2="12"/>
+                            <line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/>
+                            <line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/>
+                            </svg>
+                        </span>
+                        <span class="theme-switch__icon icon-moon">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                            <path d="M20.7 15.6A9 9 0 1 1 8.4 3.3a7 7 0 0 0 12.3 12.3z"/>
+                            </svg>
+                        </span>
+                        </span>
+                    </span>
+                    </label>
+                </nav>
+            </div>
+        </header>
 
-  <header class="site-header">
-    <div class="site-header__inner">
-      <a href="index.html" class="site-mark">Marginalia <small>/ papers</small></a>
-      <nav class="site-nav">
-        <a href="index.html">Home</a>
-        <a href="papers.html">Papers</a>
-        <a href="updates.html">Updates</a>
-        <a href="login.html" class = "nav-admin">Admin</a>
-        <a href="#">About</a>
-        <label class="theme-switch" aria-label="Toggle light and dark mode">
-          <input type="checkbox" id="theme-toggle">
-          <span class="theme-switch__track">
-            <span class="theme-switch__thumb">
-              <span class="theme-switch__icon icon-sun">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                  <circle cx="12" cy="12" r="4"/>
-                  <line x1="12" y1="2" x2="12" y2="4"/>
-                  <line x1="12" y1="20" x2="12" y2="22"/>
-                  <line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/>
-                  <line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/>
-                  <line x1="2" y1="12" x2="4" y2="12"/>
-                  <line x1="20" y1="12" x2="22" y2="12"/>
-                  <line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/>
-                  <line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/>
-                </svg>
-              </span>
-              <span class="theme-switch__icon icon-moon">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
-                  <path d="M20.7 15.6A9 9 0 1 1 8.4 3.3a7 7 0 0 0 12.3 12.3z"/>
-                </svg>
-              </span>
-            </span>
-          </span>
-        </label>
-      </nav>
-    </div>
+    <main class = "main-content">
+        <section class = "hero-home">
+            <p class = "hero-tagline">RESEARCH NOTEBOOK</p>
+            <h1>Simple breakdowns of complex research papers</h1>
+            <p class = "hero-desc">
+                I write these because reading a paper once isn't exactly the same as understanding it. This is where my understanding of the paper goes.
+            </p>
+            <div class = "hero-nav">
+                <a href= "papers.html" class = "btn-link">Explore Paper Archive</a>
+                
 
-    <div id="progress-bar">
-    </div>
-  </header>
+            </div>
+        </section>
 
-  <section class="hero">
-    <div class="hero__inner">
-      <h1 style="border-right: 2px solid #ccc;border-left: 2px solid #ccc; padding-right: 10px; margin-right: 10px;"class="hero__inner">Research Notebook</h1>
-    </div>
-  </section>
-
-  <main>
-    <article class="post-main">
-      <div class="post-meta">
-        <span>2026.07.18</span>
-        <span>3 min read</span>
-        <span>Machine Learning</span>
-      </div>
-      <span class="difficulty difficulty--intermediate">Intermediate</span>
-      <h1 class="post-title">Attention Is All You Need</h1>
-      <p class="post-source">Breaking down Vaswani et al., 2017. The paper that introduced transformer architecture to the world</p>
-
-      <div class="callout">
-        <p class="callout__label">Original abstract</p>
-        <p>The dominant sequence transduction models are based on complex recurrent or
-        convolutional neural networks that include an encoder and a decoder. The best
-        performing models also connect the encoder and decoder through an attention
-        mechanism. We propose a new simple network architecture, the Transformer,
-        based solely on attention mechanisms, dispensing with recurrence and convolutions
-        entirely. Experiments on two machine translation tasks show these models to
-        be superior in quality while being more parallelizable and requiring significantly
-        less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English
-        to-German translation task, improving over the existing best results, including
-        ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task,
-        our model establishes a new single-model state-of-the-art BLEU score of 41.8 after
-        training for 3.5 days on eight GPUs, a small fraction of the training costs of the
-        best models from the literature. We show that the Transformer generalizes well to
-        other tasks by applying it successfully to English constituency parsing both with
-        large and limited training data.</p>
-      </div>
-      
-      <div>
-        <h2 id = "plain-terms">Abstract in Plain Terms</h2>
-        <p>The paper introduces the Transformer, a new architecture that completely replaces recurrence and <span class="term" data-tooltip="Neural network layers that scan local patches of input, commonly used in image processing.">convolutions</span> with a self-attention mechanism.</p>
-      </div>
-
-      
-
-      <h2 id = "self-attention">Self-attention, worked out</h2>
-      <p>Every token produces a query <code class="inline">Q</code>, key <code class="inline">K</code>, and value <code class="inline">V</code>. A token's new representation is a weighted sum of every value, where weights come from comparing its query against every key.</p>
-
-      
-
-      <div class="math-block-wrap" data-katex= "\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V" ></div>
-
-      <div class="math-row">
-        <div class="math-block-wrap" id="eq-attention"></div>
-        <p style="font-size:0.78rem; color:var(--ink-soft); font-family:var(--font-ui); margin:0;">
-          the <span data-katex-inline="\frac{1}{\sqrt{d_k}}"></span> term stabilizes as <em>d<sub>k</sub></em> grows.
+        <p class = "why-blurb">
+            Plain language breakdowns of papers across STEM fields. The math is worked out in full, the parts that took a few rereads. There is a lot of stuff I am honestly still figuring out too. 
         </p>
-      </div>
 
-      <h2 id = "scaling-factor"> Why does the scaling factor matter?</h2>
+        <div class="stats-bar" id = "stats-bar"></div>
 
-      <p>Without the scaling factor, as <span data-katex-inline = "d_k"></span> grows large, the<span class="term" data-tooltip="Operation which multiplies vector values to measure similarity."> dot products</span> increase in magnitude. This pushes the<span class = "term" data-tooltip="An equation which turns converts raw numerical scores into probabilities that add up to 100%" > softmax </span> function into regions with extremely small gradients, making the training unstable or slow</p>
-      <p> Small values of dₖ: Unscaled dot products perform fine and help maintain stable gradients during training.</p>
-      <p> Large values of dₖ: Scaling the dot products prevents them from becoming too large, maintaining stable gradients. It ensures healthy gradient flow during<span class="term" data-tooltip="An issue during training where the updates to the wieghts of a neural network become exponentially small. This halts learning."> backpropagation. </span></p>
+        <h2 class ="section-title">Recent Papers</h2>
+        <div class = "recent-list" id = "recent-papers">
 
-      <h2 id = "multi-head-attention">Multi-Head Attention</h2>
-
-      <p> Single-head attention allows a token to gather context from the rest of the sequence. Multi-head attention extends this by running the attention mechanism multiple times in parallel with different <span class = "term" data-tooltip="Multiplying data matrices by learned weight matrices to change their shape or extract new features"></span> linear projections.</p>
-
-      <div class ="code-block">
-        <div class="code-block__bar">
-          <span class="code-block__lang">python</span>
-          <button class="copy-btn">Copy</button>
         </div>
-        <pre class="language-python"><code class="language-python">def multi_head_attention(Q,K,V,h, W_Q, W_K, W_V, W_O):
-  heads = []
-  for i in range(h):
-    Q_i = Q @ W_Q[i]
-    K_i = K @ W_K[i]
-    V_i = V @ W_V[i]
-    heads.append(attention(Q_i, K_i, V_i))
 
-  concat = np.cocatenate(heads,axis=-1)
+        <p class = "updates-link-row">
+            <a href="updates.html">See what's changed on the site &rarr;</a>
+        </p>
 
-  return concat @ W_O
-          </code>
-        </pre>
-      </div>
-
-      <h2 id = "positional-encoding"> Positional Encoding </h2>
-
-      <p>Self-attention processes all tokens in parllel using <span class = "term" data-tooltip="Math operations performed on grids of numbers all at once.">matrix operations</span>. Due to this, it has no innate sense of sequence order or position. To fix this,<span class = "term" data-tooltip="Number vectors added to word vectors to give the model info about word order in a sequence.">positional encodings </span> are added to the <span class = "term" data-tooltip="Vector representations where words with similar meaning are stored closely together mathematically.">input embeddings</span> before entering the attention blocks.</p>
-      
-      <!-- Add math equations for positional encoding here -->
-
-      <h2 id = "encoder-vs-decoder">Encoder vs Decoder</h2>
-      <table class = "research-table">
-        <thead>
-          <tr>
-            <th>Component</th>
-            <th>Encoder</th>
-            <th>Decoder</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Input</strong></td>
-            <td>Source Sequence</td>
-            <td>Target Sequence (shifted to the right)</td>
-          </tr>
-          <tr>
-            <td><strong> Attention Type</strong></td>
-            <td> Full bi-directional self-attention</td>
-            <td> Casual(masked) self attention + Cross Attention</td>
-            
-          </tr>
-
-          <tr>
-            <td><strong>Purpose</strong></td>
-            <td> Builds deep contextual representations</td>
-            <td> Generates output token auto-regressively</td>
-          </tr>
-        </tbody>
-      </table>
-      
-
-      <div class="callout callout--takeaway">
-        <p class="callout__label">Key takeaway</p>
-        <p>Multi-head attention isn't just about adding raw capacity to the network. Instead, it lets the model project inputs into different <span class = "term" data-tooltip="Low dimensional areas where a model can pay attention to specific areas">subspaces</span> at the same time, allowing each head to specialize in tracking a unique type of relationship across the sequence.</p>
-      </div>
-
-
-
-      <div class="citations">
-        <h2>Citations</h2>
-        <ol>
-          <li>Vaswani, A. et al. (2017). Attention Is All You Need. <em>NeurIPS</em>.</li>
-        </ol>
-      </div>
-
-      <div class="post-tags">
-        <span class="tag-chip">ML</span>
-        <span class="tag-chip">NLP</span>
-        <span class="tag-chip">Transformers</span>
-      </div>
-    </article>
-
-    <aside class="margin-notes" aria-label="Margin notes">
-      <nav class="toc" aria-label="Table of contents">
-        <span class="toc__label">On this page</span>
-        <ul id="toc-list"></ul>
-      </nav>
-      <div class="margin-note margin-note--accent">
-        <span class="margin-note__label">Definition</span>
-        <p>Softmax turns raw scores into a probability distribution summing to 1.</p>
-      </div>
-      <div class="margin-note margin-note--brick">
-        <span class="margin-note__label">Key takeaway</span>
-        <p>Parallel comparison replaces sequential processing — the core reason transformers train faster than RNNs.</p>
-      </div>
-      <div class="margin-note margin-note--accent">
-        <span class="margin-note__label">Notation</span>
-        <p><em>d<sub>k</sub></em> = 64 in the base transformer, across 8 heads.</p>
-      </div>
-    </aside>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap">Marginalia | Reading between the margins</div>
-  </footer>
-
-</div>
-
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-<script defer src="js/main.js"></script>
+        </section>
+    </main>
+<footer class = "site-footer">
+    <div class = "wrap">Marginalia | Reading between the margins</div>
+</footer>
+    </div>
+    <script defer src = js/home.js></script>
+    <script defer src="js/main.js"></script>
 </body>
+
 </html>
