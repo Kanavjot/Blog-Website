@@ -9,13 +9,13 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 app.use(session({
-  secret: 'smth-secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {maxAge: 1000 * 60 * 60 * 4} // 4 hrs
 }));
 
-const ADMIN_PASSWORD = "Vanak@123452417";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 function requireLogin(req, res, next) {
   if (req.session.loggedIn) {
     next();
