@@ -51,34 +51,33 @@
             </div>
         </header>
 
-    <main class = "main-content">
-        <section class = "hero-home">
-            <p class = "hero-tagline">RESEARCH NOTEBOOK</p>
-            <h1>Simple breakdowns of complex research papers</h1>
-            <p class = "hero-desc">
-                I write these because reading a paper once isn't exactly the same as understanding it. This is where my understanding of the paper goes.
-            </p>
-            <div class = "hero-nav">
-                <a href= "papers.html" class = "btn-link">Explore Paper Archive</a>
-                
+    <main class = "main-content" style = "max-width: 68rem; margin: 0 auto ; padding: 2rem 1.5rem;">
+        <section class = "hero-split">
+            <div class = "hero-left">
+            
+                <p class = "hero-tagline">RESEARCH NOTEBOOK</p>
+                <h1>Simple breakdowns of complex research papers</h1>
+                <p class = "hero-desc">
+                    I write these because reading a paper once isn't exactly the same as understanding it. This is where my understanding of the paper goes.
+                </p>
+                <div class = "hero-nav">
+                    <a href= "papers.html" class = "btn-link">Explore Paper Archive &rarr;</a>
+                </div>
+            </div>
 
+            <div class = "hero-right">
+                <div class = "preview-card" id = "hero-preview"></div>
             </div>
         </section>
 
-        <p class = "why-blurb">
-            Plain language breakdowns of papers across STEM fields. The math is worked out in full, the parts that took a few rereads. There is a lot of stuff I am honestly still figuring out too. 
-        </p>
-
         <div class="stats-bar" id = "stats-bar"></div>
 
-        <h2 class ="section-title">Recent Papers</h2>
-        <div class = "recent-list" id = "recent-papers">
-
-        </div>
-
-        <p class = "updates-link-row">
-            <a href="updates.html">See what's changed on the site &rarr;</a>
-        </p>
+        <section style = "margin-top:3rem;">
+            <h2 class ="section-title">Recent Papers</h2>
+            <div class = "recent-list" id = "recent-papers"></div>
+            <p class = "updates-link-row" style = "margin-top: 2rem;">
+                <a href="updates.html">See what's changed on the site &rarr;</a>
+            </p>
 
         </section>
     </main>
@@ -86,7 +85,7 @@
     <div class = "wrap">Marginalia | Reading between the margins</div>
 </footer>
     </div>
-    <script defer src = js/home.js></script>
+    <script defer src = "js/home.js"></script>
     <script defer src="js/main.js"></script>
 </body>
 

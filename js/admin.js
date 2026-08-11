@@ -15,13 +15,13 @@ aF.addEventListener("submit", async(e) =>{
     e.preventDefault();
 
     const dI = {
-        title:document.getElementById("title").ariaValueMax.trim(),
-        tags:document.getElementById("tags").ariaValueMax.trim().toLowerCase(),
-        difficulty:document.getElementById("difficulty").ariaValueMax,
-        summary:document.getElementById("summary").ariaValueMax.trim(),
-        read_time:document.getElementById("read_time").ariaValueMax.trim(),
-        date: document.getElementById("date").ariaValueMax.trim(),
-        content:document.getElementById("content").ariaValueMax.trim()
+        title:document.getElementById("title").value.trim(),
+        tags:document.getElementById("tags").value.trim().toLowerCase(),
+        difficulty:document.getElementById("difficulty").value,
+        summary:document.getElementById("summary").value.trim(),
+        read_time:document.getElementById("read_time").value.trim(),
+        date: document.getElementById("date").value.trim(),
+        content:document.getElementById("content").value.trim()
     };
 
     if(dI.read_time && !dI.read_time.includes("min read")){
@@ -47,7 +47,7 @@ aF.addEventListener("submit", async(e) =>{
         });
         const dbRes = await resObj.json();
 
-        if(!resobj.ok){
+        if(!resObj.ok){
             console.error("Backend Refused", dbRes);
             throw new Error(dbRes.error || "Supabase ingestion failed");
 
@@ -70,7 +70,7 @@ aF.addEventListener("submit", async(e) =>{
 function cDashStats(dbRecords){
     const statsW = document.getElementById("analytics-container");
     const tC = dbRecords.length;
-    letuT = new Set();
+    let uT = new Set();
     let aC = 0;
 
     dbRecords.forEach(record => {
@@ -88,7 +88,7 @@ function cDashStats(dbRecords){
 
     statsW.innerHTML =`
     <div class = "stat-card">
-    <span class = "stat-num">${tC}</spam>
+    <span class = "stat-num">${tC}</span>
     <span class = "stat-label"> Total Papers</span>
     </div>
 
@@ -106,7 +106,7 @@ function cDashStats(dbRecords){
 async function Dashview() {
     try{
         const rawData = await fetch("/api/papers")
-        if (!rawData.ok) throw new Error("COuldn't pull from Postgres");
+        if (!rawData.ok) throw new Error("Couldn't pull from Postgres");
         const activePapers = await rawData.json();
         cDashStats(activePapers);
 
@@ -121,7 +121,7 @@ async function Dashview() {
             <strong style = "color: var(--ink);font-family:var(--font-display); font-size: 1.1rem;">${p.title}</strong><br>
             <span style = "font-size:0.8rem; color:var(--ink-faint); font-family:var(--font-mono);">${p.date || 'No Date'} &bull; ${p.difficulty}</span>
             </div>
-            <buttton data-db-id="${p.id}" class = "delete-btn">Nuke It</button> `;
+            <button data-db-id="${p.id}" class = "delete-btn">Nuke It</button> `;
             lWrap.appendChild(lNode);
         });
         

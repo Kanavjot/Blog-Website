@@ -4,13 +4,36 @@ async function loadHome() {
     const papers = await res.json();
 
     renderStats(papers);
-    renderRecent(papers.slice(0, 4));
+    if (papers.length > 0) {
+      renderHeroPreview(papers[0])
+      renderRecent(papers.slice(1,5))
+    }
+    else {
+      renderRecent([])
+    }
 
   } catch (err) {
     console.error("Failed to load homepage papers:", err);
     document.getElementById("recent-papers").innerHTML =
       `<p class="home-loading">Couldn't load papers right now.</p>`;
   }
+}
+
+function renderHeroPreview(paper) {
+  const box = document.getElementById("hero-preview");
+  if(!box) return;
+  const tagsHtml = paper.tags.split(",").map(t => t.trim()).join(" &middot; ");
+  box.innerHTML = `<div class = preview-meta>LATEST PREVIEW</div>
+  <h3>${paper.title}</h3>
+  <p class = "preview-snippet">${paper.summary || "Summary coming soon..."}</p>
+  <div class = "hero-margin-note hero-margin-note--accent note-1">
+  <span class = "note-label">Tags</span>
+  ${tagsHtml}
+  </div>
+  <div class = "hero-margin-note hero-margin-note--brick note-2">
+  <span class = "note-label">Difficulty</span>
+  ${paper.difficulty.charAt(0).toUpperCase() + paper.difficulty.slice(1)}  &mdash; ${paper.read_time}
+  </div>`;
 }
 
 function renderStats(papers) {

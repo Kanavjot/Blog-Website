@@ -18,7 +18,8 @@ async function setup() {
     summary TEXT NOT NULL,
     read_time TEXT NOT NULL,
     date TEXT NOT NULL,
-    link TEXT NOT NULL)`);
+    link TEXT NOT NULL
+    )`);
 
     const {rows} = await pool.query("SELECT COUNT(*) AS total FROM papers");
     const count = parseInt(rows[0].total, 10);
