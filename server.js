@@ -54,7 +54,7 @@ app.get("/api/papers", async(req,res) => {
 })
 
 app.post("/api/papers", requireLogin, async(req, res) => {
-  const{title, tags, difficulty, summary, read_time, date, link} = req.body;
+  const{title, tags, difficulty , summary , read_time, date , link, content_html} = req.body;
   if (!title || !title.trim()) return res.status(400).json({error: "Title is required"});
   if(!tags || !tags.trim()) return res.status(400).json({error : "Tags are required"})
   if(!["beginner", "intermediate", "advanced"].includes(difficulty)) {
@@ -62,8 +62,8 @@ app.post("/api/papers", requireLogin, async(req, res) => {
   }
 
   try{
-    const query = `INSERT INTO papers (title, tags, difficulty, summary, read_time , date , link)
-    VALUES ($1, $2, $3 , $4 , $5 , $6 , $7)
+    const query = `INSERT INTO papers (title, tags, difficulty , summary, read_time , date , link , content_html)
+    VALUES ($1, $2, $3 , $4 , $5 , $6 , $7 , $8)
     RETURNING *`;
 
     const values = [
@@ -73,7 +73,8 @@ app.post("/api/papers", requireLogin, async(req, res) => {
       summary ? summary.trim() : "",
       read_time ? read_time.trim() : "",
       date ? date.trim() : "",
-      link ? link.trim() : ""
+      link ? link.trim() : "",
+      content_html || ""
     ];
 
     const {rows} = await db.query(query, values);

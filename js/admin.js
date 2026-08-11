@@ -156,9 +156,18 @@ Dashview(); */
 
 fetch("/api/session-check").then(r => r.json()).then(data => {
     if (!data.loggedIn){
-        window.location.href = "/login.html";
+        window.location.href = "/reader-login.html";
     }
 });
+
+tinymce.init({
+    selector: '#content',
+    height: 500,
+    plugins: "code table lists link",
+    toolbar: "undo redo | blocks | bold italic | bullist numlist | table link | code",
+    skin:"oxide-dark",
+    content_css:"dark"
+})
 
 const form = document.getElementById("paper-form");
 const statusEl = document.getElementById("status");
@@ -172,7 +181,8 @@ form.addEventListener("submit", async (e) => {
         summary: document.getElementById("summary").value,
         read_time: document.getElementById("read_time").value,
         date: document.getElementById("date").value,
-        link: document.getElementById("link").value
+        link: document.getElementById("link").value,
+        content_html: tinymce.get("content").getContent()
     };
     try {
         const res = await fetch("/api/papers", {
@@ -196,32 +206,42 @@ form.addEventListener("submit", async (e) => {
 });
 
 async function loadAdminPapers() {
-    const res = await fetch("/api/papers");
-    const papers = await res.json();
     const container = document.getElementById("papers-list");
-    container.innerHTML = "";
-    papers.forEach((paper) => {
-        const row = document.createElement("div");
-        row.style.cssText = "display:flex;align-items:center; justify-content:space-between; border-bottom: 1px solid var(--rule); padding: 0.6rem 0";
-        row.innerHTML = `
-            <span style = "font-size: 0.9rem; color:var(--ink);">${paper.title} </span>
-            <button data-id = "${paper.id}" style = "background: var(--brick); color: var(--bg-raised); border: none; padding: 0.3rem 0.7rem; border-radius: var(--radius);font-size: 0.8rem; cursor:pointer;">Delete</button>
-        `;
-        container.appendChild(row);
+    if (!container) return;
+
+    try{
+        const res = await fetch("/api/papers");
+        if (!res.ok) throw new Error("Failed to load papers");
+
+        const papers = await res.json();
+        if(!Array.isArray(papers)) return;
+
+        container.innerHTML = "";
+        papers.forEach((paper) => {
+            const row = document.createElement("div");
+            row.style.cssText = "display:flex;align-items:center; justify-content:space-between; border-bottom: 1px solid var(--rule); padding: 0.6rem 0";
+            row.innerHTML = `
+                <span style = "font-size: 0.9rem; color:var(--ink);">${paper.title} </span>
+                <button data-id = "${paper.id}" style = "background: var(--brick); color: var(--bg-raised); border: none; padding: 0.3rem 0.7rem; border-radius: var(--radius);font-size: 0.8rem; cursor:pointer;">Delete</button>
+            `;
+            container.appendChild(row);
     });
     
     container.querySelectorAll("button").forEach((btn) => {
         btn.addEventListener("click", async () => {
             const id = btn.dataset.id;
             if (!confirm("Delete this paper?")) return;
-            const res = await fetch(`/api/papers/${id}`, { method: "DELETE" });
-            if (res.ok) {
+            const res2 = await fetch(`/api/papers/${id}`, { method: "DELETE" });
+            if (res2.ok) {
                 loadAdminPapers();
             } else {
                 alert("Failed to Delete");
             }
         });
     });
+} catch(err) {
+    console.error("Error loading admin papers:",err);
+    }
 }
 
-loadAdminPapers(); 
+loadAdminPapers();

@@ -7,51 +7,58 @@
         <link rel="stylesheet" href = "css/styles.css">
 
     </head>
-    <body style="display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--bg); font-family: var(--font-ui); margin:0;">
-        <form id = "login-form" style = "width: 20rem;">
-            <h1 style = "font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 1rem; color: var(--ink)">Admin Login</h1>
-            <input type = "password" id = "password" placeholder = "Password" required
-            style = "width : 100%;
-            padding: 0.5rem 0.7rem;
-            background:var(--bg-raised);
-            margin-bottom: 0.8rem;
-            color: var(--ink);
-            border: 1px solid var(--rule-strong);
-            border-radius: var(--radius);
-            box-sizing: border-box;">
+    <body>
+        <div id = "site-header"></div>
+            <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--bg); font-family: var(--font-ui); margin:0;">
+            <form id = "login-form" style = "width: 20rem;">
+                <h1 style = "font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 1rem; color: var(--ink)">Admin Login</h1>
+                <input type = "password" id = "password" placeholder = "Password" required
+                style = "width : 100%;
+                padding: 0.5rem 0.7rem;
+                background:var(--bg-raised);
+                margin-bottom: 0.8rem;
+                color: var(--ink);
+                border: 1px solid var(--rule-strong);
+                border-radius: var(--radius);
+                box-sizing: border-box;">
 
-            <button type = "submit" style = "width: 100%;
-            padding: 0.5rem ;
-            background: var(--accent);
-            color: var(--bg-raised);
-            border:none;
-            border-radius: var(--radius);
-            cursor: pointer;"> Login</button>
-            <p id = "error" style = "color: var(--brick); margin-top:0.8rem"></p>
+                <button type = "submit" style = "width: 100%;
+                padding: 0.5rem ;
+                background: var(--accent);
+                color: var(--bg-raised);
+                border:none;
+                border-radius: var(--radius);
+                cursor: pointer;"> Login</button>
+                <p id = "error" style = "color: var(--brick); margin-top:0.8rem"></p>
 
-        </form>
+            </form>
 
-        <script>
-            document.getElementById("login-form").addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const password = document.getElementById("password").value;
-                const res = await fetch("/api/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+            <script>
+                document.getElementById("login-form").addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const password = document.getElementById("password").value;
+                    const res = await fetch("/api/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
 
-                    body: JSON.stringify({password})
+                        body: JSON.stringify({password})
 
-                });
-                if (res.ok){
-                    window.location.href = "admin.html";
-                } else {
-                    document.getElementById("error").textContent = "Wrong password.";
+                    });
+                    if (res.ok){
+                        window.location.href = "admin.html";
+                    } else {
+                        document.getElementById("error").textContent = "Wrong password.";
 
-                }
-            })
-        </script>
+                    }
+                })
+            </script>
+            <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <script src = "js/supabase.client.js"></script>
+            <script src = "js/nav.js"></script>
+            <script src="js/main.js"></script>
+        </div>
     </body>
 
 </html>

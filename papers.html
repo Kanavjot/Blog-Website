@@ -13,21 +13,7 @@
 
     <body>
         <div class = "page">
-            <header class="site-header">
-                <div class="site-header__inner">
-                        <a href="index.html" class="site-mark">Marginalia <small>/ papers</small></a>
-                        <nav class = "site-nav">
-                            <a href="index.html">Home</a>
-                            <a href="papers.html">Papers</a>
-                            <a href="updates.html">Updates</a>
-                            <a href="login.html">Admin</a>
-                            <a href="about.html">About</a>
-                        </nav>
-                </div>
-            </header>    
-        
-    
-
+        <div id = "site-header"></div>
         <section class="hero">
             <div class="hero__inner">
                 <h1 style="border-right: 2px solid #ccc;border-left: 2px solid #ccc; padding-right: 10px; margin-right: 10px;"class="hero__inner">Research Notebook</h1>
@@ -66,6 +52,10 @@
             <div class="wrap">Marginalia | Reading between the margins</div>
         </footer>
     </div>
+    <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src = "js/supabase-client.js"></script>
+    <script src = "js/nav.js"></script>
+    <script src="js/main.js"></script>
     <script defer src = "js/papers.js"></script>
     </body>
 </html>

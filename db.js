@@ -9,6 +9,9 @@ const pool = new Pool({
 console.log("Setting up database")
 
 async function setup() {
+
+//await pool.query("DROP TABLE IF EXISTS papers;"); Use if u gotta delete and re setup db
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS papers(
     id SERIAL PRIMARY KEY,
@@ -20,6 +23,8 @@ async function setup() {
     date TEXT NOT NULL,
     link TEXT NOT NULL
     )`);
+
+    await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS content_html TEXT DEFAULT ''`);
 
     const {rows} = await pool.query("SELECT COUNT(*) AS total FROM papers");
     const count = parseInt(rows[0].total, 10);
@@ -33,7 +38,7 @@ async function setup() {
       await pool.query(
         `INSERT INTO papers ( title, tags, difficulty, summary, read_time, date, link)
         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        ["Why the double slit experiment can break intuition", "physics, quantum" , "beginner","A walkthrough of wave-particle duality in uantam mechanics and the measurement problem.","","",""]
+        ["Why the double slit experiment can break intuition", "physics, quantum" , "beginner","A walkthrough of wave-particle duality in quantam mechanics and the measurement problem.","","",""]
       );
 
       await pool.query(
