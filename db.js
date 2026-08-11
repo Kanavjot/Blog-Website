@@ -28,7 +28,7 @@ async function setup() {
       await pool.query(
         `INSERT INTO papers (title, tags, difficulty , summary , read_time, date , link)
         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        ["Attention Is All You Need", "ml,nlp,transformers" , "intermediate" , "Breaking down Vaswani et al.., 2017. That paper that introduced transformer srchitecture to the world.", "3 min read", "2026-07-18", "attention-is-all-you-need.html"]
+        ["Attention Is All You Need", "ml,nlp,transformers" , "intermediate" , "Breaking down Vaswani et al.., 2017. That paper that introduced transformer architecture to the world.", "3 min read", "2026-07-18", "attention-is-all-you-need.html"]
       );
       await pool.query(
         `INSERT INTO papers ( title, tags, difficulty, summary, read_time, date, link)
