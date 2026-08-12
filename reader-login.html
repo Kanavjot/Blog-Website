@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Marginalia - Log In</title>
+        <link rel="stylesheet" href = "css/styles.css">
+        <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    </head>
+
+    <body>
+    <div id = "site-header"></div>
+    <div class = "auth-body">
+        <form id = "login-form" class = "auth-form">
+            <h1>Log In</h1>
+            <input type = "email" id = "email" placeholder="Email" required class = "auth-input">
+            <input type = "password" id = "password" placeholder="Password" required class = "auth-input">
+            <button type = "submit" class = "auth-btn">Log In</button>
+
+            <p id = "message" class ="auth-msg">
+
+            </p>
+
+            <p class = "auth-footer"><a href = "signup.html">Need an account? Sign Up</a></p>
+        </form>
+    </div>
+        <script src = "https://cdn.jsdelivr.net/npm/@supabase"></script>
+        <script src = "js/supabase-client.js"></script>
+        <script src = "js/nav.js"></script>
+        <script src = "js/main.js"></script>
+        <script src = js/reader-login.js></script>
+    </body>
+</html>

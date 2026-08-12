@@ -8,39 +8,19 @@
     </head>
     <body>
         <div id = "site-header"></div>
-        <div style = "display:flex ; align-items:center ; font-family:var(--font-ui) ; background: var(--bg) ; justify-content:center ; height:100vh ; margin:0">
-            <form id = "signup-form" style = "width: 20rem;">
-                <h1 style = " font-size: 1.3rem ; margin-bottom:1rem ; color:var(--ink) ; font-family: var(--font-display);"> Create an Account</h1>
-                <input type = "email" id = "email" placeholder = "Email" required style = " width:100% ; margin-bottom:0.6rem ; padding:0.5rem 0.7rem ; background: var(--bg-raised) ; border:1px solid var(--rule-strong) ; color:var(--ink) ; border-radius:var(--radius) ; box-sizing:border-box;">
-                <input type = "password" id = "password" placeholder="Password(min 6 characters)" required minlength="6" style = " width:100% ; margin-bottom:0.8rem ; padding:0.5rem 0.7rem ; background: var(--bg-raised) ; border:1px solid var(--rule-strong) ; color:var(--ink) ; border-radius:var(--radius) ; box-sizing:border-box;">
-                <button type = "submit" style = "width:100% ; padding:0.5rem ; background:var(--accent) ; color:var(--bg-raised) ; border:none ; border-radius:var(--radius) ; cursor:pointer;">Sign Up</button>
-                <p id = "message" style = "margin-top:0.8rem ; font-size:0.85rem;"></p>
-                <p style = "font-size:0.85rem ; margin-top: 0.8rem;"><a href = "reader-login.html" style = "color:var(--accent);">Already have an Account? Log In</a></p>
+        <div class = "auth-body">
+            <form id = "signup-form" class = "auth-form">
+                <h1> Create an Account</h1>
+                <input type = "email" id = "email" placeholder = "Email" required class = "auth-input">
+                <input type = "password" id = "password" placeholder="Password(min 6 characters)" required minlength="6" class = "auth-input">
+                <button type = "submit" class = "auth-btn">Sign Up</button>
+                <p id = "message" class = "auth-msg"></p>
+                <p class = "auth-footer"><a href = "reader-login.html">Already have an Account? Log In</a></p>
             </form>
         </div>
-        </body>
         <script src = "js/supabase-client.js"></script>
         <script src = "js/nav.js"></script>
         <script src = "js/main.js"></script>
-        
-        <script> 
-            document.getElementById("signup-form").addEventListener("submit", async(e) =>{
-                e.preventDefault();
-                const email = document.getElementById("email").value
-                const password = document.getElementById("password").value
-                const messageEl = document.getElementById("message");
-
-                const {data, error} = await supabaseClient.auth.signUp({email , password});
-                if (error) {
-                    messageEl.textContent = error.message;
-                    messageEl.style.color = "var(--brick)";
-                }
-                else {
-                    messageEl.textContent = "Check your email to verify your account before logging in.";
-                    messageEl.style.color = "var(--accent)"
-                }
-
-            });
-        </script>
+        <script src = "js/signup.js"></script>
     </body>
 </html>

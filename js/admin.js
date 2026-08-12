@@ -156,7 +156,7 @@ Dashview(); */
 
 fetch("/api/session-check").then(r => r.json()).then(data => {
     if (!data.loggedIn){
-        window.location.href = "/reader-login.html";
+        window.location.href = "reader-login.html";
     }
 });
 

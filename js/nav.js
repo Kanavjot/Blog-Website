@@ -7,9 +7,8 @@ async function renderNav() {
         {href: "index.html" , label: "Home"},
         {href : "papers.html" , label: "Papers"},
         {href : "updates.html" , label : "Updates"},
-        /*{href : "signup.html" , label : "Signup"},
-        {href : "admin.html" , label: "Admin"},*/
-        {href : "about.html" , label : "About"}
+        {href : "about.html" , label : "About"},
+        {href : "signup.html" , label : "Sign Up"},
     ];
 
     const linksHtml = links.map(l =>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Marginalia -- Dashboard</title>
+        <link rel = "stylesheet" href = "css/styles.css">
+        <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    </head>
+    <body>
+        <div class = "page">
+            <div id="site-header"></div>
+            <main class = "wrap dash-content">
+                <h1>Your Dashboard</h1>
+                <p class = "dash-sub">Signed in as <span id = "user-email">...</span></p>
+                <h2>Bookmarked Papers</h2>
+                <!--Build bookmarks functionality dude-->
+                <p class = "dash-empty">Idk man bookmarks aren't rly built yet. Coming soon tho</p>
+
+                <button id = "logout-btn" class = "dash-btn">Log Out</button>
+            </main> 
+
+            <footer class = "site-footer">
+                <div class = "wrap">Marginalia | Reading between the margins</div>
+            </footer>
+
+            <script src = "js/supabase-client.js"></script>
+            <script src = "js/nav.js"></script>
+            <script src = "js/dashboard.js"></script>
+            <script src = "js/main.js"></script>
+        </div>
+    </body>
+</html>
