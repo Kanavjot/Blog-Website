@@ -1,24 +1,48 @@
-window.addEventListener("load", () => {
-  // Render LaTeX
-  const blockEls = document.querySelectorAll("[data-katex]");
-  console.log("Found block-katex elements:", blockEls.length);
-  blockEls.forEach((el) => {
-    try {
-      katex.render(el.dataset.katex, el, { displayMode: true });
-    } catch (err) {
-      console.error("Block KaTeX failed for:", el.dataset.katex, err);
+function renderMath() {
+  document.querySelectorAll("[data-katex]").forEach((el)=> {
+    try{
+      katex.render(el.dataset.katex, el , {displayMode: true});
+    }catch(err) {
+      console.error("Block Katex failure ", el.dataset.katex, err)
     }
   });
 
-  const inlineEls = document.querySelectorAll("[data-katex-inline]");
-  console.log("Found inline-katex elements:", inlineEls.length);
-  inlineEls.forEach((el) => {
-    try {
+  document.querySelectorAll("[data-katex-inline]").forEach((el)=>{
+    try{
       katex.render(el.dataset.katexInline, el);
     } catch (err) {
-      console.error("Inline KaTeX failed for:", el.dataset.katexInline, err);
+      console.error("Inline Katex failure ", el.dataset.katexInline, err);
     }
   });
+}
+
+function renderCopybtn() {
+  document.querySelectorAll(".copy-btn").forEach((btn) => {
+    btn.addEventListener("click" , async() => {
+      const codeEl = btn.closest(".code-block").querySelector("code");
+      const text = codeEl.innerText;
+      try{
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "Copied"
+        btn.dataset.copied = "true";
+        setTimeout(() =>{
+          btn.textContent = "Copy";
+          btn.dataset.copied = "false";
+        }, 1400);
+      } catch (err) {
+        btn.textContent = "Cmd/Ctrl + C"
+      }
+    });
+  });
+}
+
+
+
+
+window.addEventListener("load", () => {
+  renderMath();
+  renderCopybtn();
+  buildTOC();
 
   const themeToggle = document.getElementById("theme-toggle");
 
@@ -38,24 +62,7 @@ window.addEventListener("load", () => {
   });
 
 });
-  // Copy to clipboard
-  document.querySelectorAll(".copy-btn").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const codeEl = btn.closest(".code-block").querySelector("code");
-      const text = codeEl.innerText;
-      try {
-        await navigator.clipboard.writeText(text);
-        btn.textContent = "Copied";
-        btn.dataset.copied = "true";
-        setTimeout(() => {
-          btn.textContent = "Copy";
-          btn.dataset.copied = "false";
-        }, 1400);
-      } catch (err) {
-        btn.textContent = "Cmd/Ctrl+C";
-      }
-    });
-  });
+
 
 (function() {
   const saved = localStorage.getItem("theme")
@@ -76,7 +83,8 @@ window.addEventListener("resize", updateProgressBar);
 
 
 
-// Highlight viewed section in TOC
+
+
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -132,7 +140,7 @@ function buildTOC() {
       li.appendChild(link);
       currentSubList.appendChild(li);
 
-      // this h2 has at least one child — reveal its toggle
+      // this h2 has at least one child + reveal its toggle
       const parentToggle = currentParentLi.querySelector(".toc-toggle");
       parentToggle.style.visibility = "visible";
     }

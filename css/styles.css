@@ -560,6 +560,7 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   margin: 2rem auto;
 }
 
+
 .dash-content h1, h2{
   font-family: var(--font-display);
   color: var(--ink);

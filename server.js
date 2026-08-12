@@ -24,6 +24,17 @@ function requireLogin(req, res, next) {
   }
 }
 
+app.get("/api/papers/:id" , async(req, res) => {
+  try {
+    const {rows} = await db.query("SELECT * FROM papers WHERE id = $1" , [req.params.id]);
+    if (rows.length === 0) return res.status(404).json({error: "Paper not found"});
+    res.json(rows[0]);
+  } catch (err){
+    console.error(err)
+    res.status(500).json({error: "Databse Error"})
+  }
+});
+
 app.post("/api/login", (req, res) => {
   const { password } = req.body;
   if (password === ADMIN_PASSWORD) {
