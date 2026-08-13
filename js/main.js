@@ -82,9 +82,6 @@ window.addEventListener("scroll", updateProgressBar);
 window.addEventListener("resize", updateProgressBar);
 
 
-
-
-
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -102,6 +99,8 @@ const observer = new IntersectionObserver(
 function buildTOC() {
   const headings = document.querySelectorAll(".post-main h2[id], .post-main h3[id]");
   const tocList = document.getElementById("toc-list");
+  if (!tocList) return;
+  tocList.innerHTML = ""; 
   let currentSubList = null;
   let currentParentLi = null;
 
@@ -146,7 +145,6 @@ function buildTOC() {
     }
   });
 }
-buildTOC();
 
 function toggleSublist(toggle, sublist) {
   const isOpen = toggle.getAttribute("aria-expanded") === "true";

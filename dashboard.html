@@ -2,31 +2,56 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Marginalia -- Dashboard</title>
+        <title>Marginalia -- Your Dashboard</title>
         <link rel = "stylesheet" href = "css/styles.css">
         <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     </head>
     <body>
         <div class = "page">
-            <div id="site-header"></div>
-            <main class = "wrap dash-content">
-                <h1>Your Dashboard</h1>
-                <p class = "dash-sub">Signed in as <span id = "user-email">...</span></p>
-                <h2>Bookmarked Papers</h2>
-                <!--Build bookmarks functionality dude-->
-                <p class = "dash-empty">Idk man bookmarks aren't rly built yet. Coming soon tho</p>
+            <div id = "site-header"></div>
+            <main class = "dash">
+                <div class = "dash-head">
+                    <div>
+                    <h1 id = "user-name">Loading...</h1>
+                    <span class = "role-badge">Reader</span>
+                    </div>
+                    <button id = "logout-btn" class = "remove-btn">Log Out</button>
+                </div>
 
-                <button id = "logout-btn" class = "dash-btn">Log Out</button>
-            </main> 
+                <div class = "stats-row">
+                    <div class = "stat-box"><strong id = "stat-saved">0</strong><span>Saved Papers</span></div>
+                    <div class = "stat-box"><strong id = "stat-notes">0</strong><span>Notes</span></div>
+                </div>
 
-            <footer class = "site-footer">
-                <div class = "wrap">Marginalia | Reading between the margins</div>
-            </footer>
+                <div class = "tabs">
+                    <button class = "tab-btn active" data-tab="library">Library</button>
+                    <button class = "tab-btn" data-tab="desk">My Desk</button>
+                    <button class = "tab-btn" data-tab="notes">Notes</button>
+                </div>
 
-            <script src = "js/supabase-client.js"></script>
-            <script src = "js/nav.js"></script>
-            <script src = "js/dashboard.js"></script>
-            <script src = "js/main.js"></script>
+                <section class = "tab-panel active" id = "tab-library">
+                    <div id = "library-list"><p>Loading...</p></div>
+                </section>
+
+                <section class = "tab-panel" id = "tab-desk">
+                    <p style = "color: var(--ink-soft) ; font-size: 0.8rem">Follow topics to get relevant papers surfaced first.</p>
+                    <div id = "topic-toggles"></div>
+                </section>
+
+                <section class = "tab-panel" id = "tab-notes">
+                    <form id = "note-form" class = "note-form" style="margin-bottom:1.2rem;">
+                        <textarea id="note-content" placeholder="Write a note..."></textarea>
+                        <button type = "submit" style="margin-top:0.5rem ; background: var(--accent) ; color:var(--bg-raised); border:none; padding: 0.4rem 0.9rem; border-radius: var(--radius);cursor: pointer">Save Note</button>
+                    </form>
+                    <div id = "notes-list"></div>
+                </section>
+
+            </main>
+            <footer class = "site-footer"><div class = "wrap">Marginalia | Reading between the margins</div></footer>
         </div>
+        <script src = "js/supabase-client.js"></script>
+        <script src = "js/nav.js"></script>
+        <script defer src = "js/main.js"></script>
+        <script src = "js/dashboard.js"></script>
     </body>
 </html>

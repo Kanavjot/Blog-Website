@@ -78,7 +78,7 @@
 
       <p>Without the scaling factor, as <span data-katex-inline = "d_k"></span> grows large, the<span class="term" data-tooltip="Operation which multiplies vector values to measure similarity."> dot products</span> increase in magnitude. This pushes the<span class = "term" data-tooltip="An equation which turns converts raw numerical scores into probabilities that add up to 100%" > softmax </span> function into regions with extremely small gradients, making the training unstable or slow</p>
       <p> Small values of dₖ: Unscaled dot products perform fine and help maintain stable gradients during training.</p>
-      <p> Large values of dₖ: Scaling the dot products prevents them from becoming too large, maintaining stable gradients. It ensures healthy gradient flow during<span class="term" data-tooltip="An issue during training where the updates to the wieghts of a neural network become exponentially small. This halts learning."> backpropagation. </span></p>
+      <p> Large values of dₖ: Scaling the dot products prevents them from becoming too large, maintaining stable gradients. It ensures healthy gradient flow during<span class="term" data-tooltip="An issue during training where the updates to the weights of a neural network become exponentially small. This halts learning."> backpropagation. </span></p>
 
       <h2 id = "multi-head-attention">Multi-Head Attention</h2>
 

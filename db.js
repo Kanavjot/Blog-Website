@@ -26,6 +26,31 @@ async function setup() {
 
     await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS content_html TEXT DEFAULT ''`);
 
+    await pool.query(
+      `CREATE TABLE IF NOT EXISTS bookmarks (
+        id SERIAL PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        paper_id INTEGER NOT NULL REFERENCES papers(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT NOW(),
+        UNIQUE(user_id, paper_id))`
+    );
+
+   await pool.query(`
+    CREATE TABLE IF NOT EXISTS notes(
+      id SERIAL PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      paper_id INTEGER REFERENCES papers(id) ON DELETE CASCADE,
+      content TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT NOW()
+      )`
+    );
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS preferences(
+    user_id TEXT PRIMARY KEY,
+    topics TEXT DEFAULT '')`
+  );
+
     const {rows} = await pool.query("SELECT COUNT(*) AS total FROM papers");
     const count = parseInt(rows[0].total, 10);
 

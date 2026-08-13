@@ -19,17 +19,18 @@ async function loadPost() {
         <span>${paper.read_time}</span>
         <span class = "difficulty difficulty--${paper.difficulty}">${paper.difficulty}</span>
         </div>
-        <h1 class = "post-title">${paper.title}<h1>
+        <h1 class = "post-title">${paper.title}</h1>
         <p class = "post-source">${paper.summary}</p>
         ${paper.content_html || "<p>No content added yet.</p>"}
         <div class = "post-tags">${tagsHtml}</div>`;
 
+        
         renderMath();
         renderCopybtn();
         buildTOC();
     } catch (err) {
         console.error(err);
-        container.innerHTML = `<p class = "home-loading">Couldn't load this paper.</p>`
+        cont.innerHTML = `<p class = "home-loading">Couldn't load this paper.</p>`
     }
 }
 

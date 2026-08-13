@@ -553,46 +553,155 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
 
 /* dashboard classes*/
 
-  .dash-content{
-  display:block;
+.dash{
+  display: block;
   font-family: var(--font-ui);
-  max-width: 42rem;
-  margin: 2rem auto;
+  max-width:52rem;
+  margin:2rem auto;
+  padding:0 1.3rem;
 }
 
+.dash-head {
+  align-items : center;
+  display:flex;
+  justify-content: space-between;
+  margin-bottom: 1rem
+}
 
-.dash-content h1, h2{
-  font-family: var(--font-display);
+.dash-head h1 {
   color: var(--ink);
+  font-family:var(--font-display);
+  font-size : 1.4rem;
+  margin :0;
 }
 
-.dash-content h1{
+.role-badge{
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-size: 0.68rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  text-transform: uppercase
+}
+
+.stats-row{
+  gap:1rem;
+  display: flex;
+  margin: 1.2rem 0 2rem;
+}
+
+.stat-box {
+  background: var(--bg-raised); 
+  border: 1px solid var(--rule); 
+  border-radius: var(--radius); 
+  padding: 0.8rem 1rem;
+  flex: 1;
+ }
+
+ .stat-box strong {
+  color:var(--accent);
+  font-family: var(--font-mono);
   font-size: 1.4rem;
+  display:block;
+ }
+
+.stat-box span{
+  font-size: 0.75rem;
+  color:var(--ink-faint);
 }
 
-.dash-content h2{
-  font-size: 1.1rem ; 
-  margin-bottom:0.8rem;
+.tabs {
+  gap:0.5rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 1.5rem;
+  display: flex;
 }
 
-.dash-sub{
-  color : var(--ink-soft);
-  margin-bottom: 2rem;
+.tab-panel {display:none}
+.tab-panel.active{
+  display:block
 }
 
-.dash-empty{
+
+.tab-btn{
   color: var(--ink-faint);
-  font-size: 0.9rem;
+  font-size: 0.87rem;
+  font-family: var(--font-ui);
+  padding: 0.6rem 0.9rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.tab-btn.active {
+  color:var(--ink);
+  border-bottom-color: var(--accent)
 }
 
-.dash-btn {
-  background: var(--brick);
-  color: var(--bg-raised);
-  border: none;
-  margin-top: 2rem;
+
+.item-row{
+  border-bottom: 1px solid var(--rule);
+  align-items: center;
+  padding: 0.7rem 0;
+  display:flex;
+  justify-content: space-between;
+}
+.item-row h3{
+  font-size: 0.95rem;
+  margin: 0 0 0.2rem;
+}
+.item-row p{
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  margin:0; 
+}
+
+.note-form textarea{
+  color: var(--ink);
+  background: var(--bg-raised);
+  font-family: var(--font-ui);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);  
+  width: 100%;
+  min-height:5rem ;
+  padding: 0.6rem;
+  box-sizing: border-box;
+}
+
+.note-item{
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.note-item small{
+  color:var(--ink-faint);
+}
+
+.remove-btn{
+  color:var(--ink-soft);
+  background: none;
+  border:1px solid var(--rule-strong);
   border-radius: var(--radius);
-  padding: 0.5rem 1rem;
+  font-family: var(--font-ui);
+  padding:0.6rem;
+  box-sizing: border-box;
+}
+
+.topic-toggle { 
+  margin: 0.3rem 0.5rem 0.3rem 0; 
+  padding: 0.35rem 0.7rem; 
+  font-size: 0.82rem; 
+  border: 1px solid var(--rule-strong); 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 0.4rem; 
+  border-radius: 999px; 
   cursor: pointer;
+}
+.topic-toggle.on { 
+  background: var(--accent); 
+  color: var(--bg-raised); 
+  border-color: var(--accent);
 }
 
 .term {
