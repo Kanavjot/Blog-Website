@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Marginalia -- Login</title>
+        <title>Marginalia -- Admin Login</title>
         <link rel="stylesheet" href = "css/styles.css">
 
     </head>
@@ -12,15 +12,16 @@
             <div class = "auth-body">
             <form id = "login-form" class = "auth-form">
                 <h1>Admin Login</h1>
+                <input type = "email" id = "email" placeholder="Email" required class = "auth-input">
                 <input type = "password" id = "password" placeholder = "Password" required class = "auth-input">
 
                 <button type = "submit" class = "auth-btn"> Login</button>
-                <p id = "error" class = "auth-msg"></p>
+                <p id = "msg" class = "auth-msg"></p>
 
             </form>
             </div>
             <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-            <script src = "js/supabase.client.js"></script>
+            <script src = "js/supabase-client.js"></script>
             <script src = "js/nav.js"></script>
             <script src="js/main.js"></script>
             <script src = "js/login.js"></script>

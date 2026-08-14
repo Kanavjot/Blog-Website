@@ -64,6 +64,7 @@ app.get("/api/papers/:id" , async(req, res) => {
   try {
     const {rows} = await db.query("SELECT * FROM papers WHERE id = $1" , [req.params.id]);
     if (rows.length === 0) return res.status(404).json({error: "Paper not found"});
+    await db.query("UPDATE papers SET views = views + 1 WHERE id = $1",[req.params.id]);
     res.json(rows[0]);
   } catch (err){
     console.error(err);
@@ -166,12 +167,12 @@ app.post("/api/notes" , requireReader, async(req, res) => {
   if (!content || !content.trim()) 
     return res.status(400).json({error:"Note can't be empty"});
 
-  const {rows} = await db.query(`INSERT INTO notes (user_id,paper_id,content) VALUES ($1 , $2,$3) RETURN` , [req.userId , paper_id || null, content.trim()]);
+  const {rows} = await db.query(`INSERT INTO notes (user_id,paper_id,content) VALUES ($1 , $2,$3) RETURNING *` , [req.userId , paper_id || null, content.trim()]);
   res.status(201).json(rows[0])
 });
 
 app.delete("/api/notes/:id",requireReader,async(req,res) => {
-  await db.query(`DELETE FROM notex WHERE id = $1 and user_id = $2`, [req.params.id,req.userId]);
+  await db.query(`DELETE FROM notes WHERE id = $1 and user_id = $2`, [req.params.id,req.userId]);
   res.json({success: true});
 });
 
@@ -180,7 +181,7 @@ app.get("/api/preferences", requireReader,async(req,res) => {
   res.json(rows[0] || {topics: ""});
 });
 
-app.put("api/preferences", requireReader, async(req, res) => {
+app.put("/api/preferences", requireReader, async(req, res) => {
   const {topics} = req.body;
   await db.query(
     `INSERT INTO preferences (user_id,topics) VALUES ($1 , $2)
@@ -201,7 +202,7 @@ app.get("/api/admin/stats" , requireAdmin , async(req ,res) => {
 
     res.json({
       totalPapers: parseInt(papers.rows[0].count),
-      bydifficulty: byDifficulty.rows,
+      bydifficulty: byDiff.rows,
       totalReaders: parseInt(readers.rows[0].count),
       totalBookmarks : parseInt(bookmarks.rows[0].count),
       totalNotes: parseInt(notes.rows[0].count),

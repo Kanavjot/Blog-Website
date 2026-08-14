@@ -1,19 +1,21 @@
 document.getElementById("login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
+    const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+    const msg = document.getElementById("msg");
+    const {data, error} = await supabaseClient.auth.signInWithPassword({email, password});
+    if (error) {msg.textContent = error.message; msg.style.color = "var(--brick)"; return;}
 
-        body: JSON.stringify({password})
-
+    const res = await fetch("/api/is-admin", {
+        headers: {Authorization: `Bearer ${data.session.access_token}`}
     });
-    if (res.ok){
-        window.location.href = "admin.html";
-    } else {
-        document.getElementById("error").textContent = "Wrong password.";
+    const {isAdmin} = await res.json();
 
+    if(isAdmin) {
+        location.href = "admin.html";
+    } else {
+        msg.textContent = "This account isn't an admin account";
+        msg.style.color = "var(--brick)";
+        await supabaseClient.auth.signOut();
     }
 });

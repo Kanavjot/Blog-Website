@@ -152,22 +152,131 @@ async function Dashview() {
 
 Dashview(); */
 
+const session = supabaseClient.auth.getSession();
+const token = session?.access_token;
 
-
-fetch("/api/session-check").then(r => r.json()).then(data => {
-    if (!data.loggedIn){
-        window.location.href = "reader-login.html";
+fetch("/api/is-admin", {
+    headers: {Authorization: `Bearer ${token}`}
+})
+.then(r=> r.json())
+.then(data => {
+    if (!data.isAdmin) {
+        window.location.href = "login.html"
     }
-});
+})
+
 
 tinymce.init({
     selector: '#content',
     height: 500,
-    plugins: "code table lists link",
-    toolbar: "undo redo | blocks | bold italic | bullist numlist | table link | code",
+    plugins: "code table lists link image",
+    toolbar: "undo redo | blocks | bold italic | bullist numlist | table link image | callout katexblock katexinline codeblock | code ",
     skin:"oxide-dark",
-    content_css:"dark"
-})
+    content_css:"dark",
+    setup: (editor) => {
+        editor.ui.registry.addButton("callout", {
+            text:"Callout",
+            onAction: () => {
+                editor.windowManager.open({
+                    title: "Insert Callout",
+                    body: {
+                        type: "panel",
+                        items: [
+                            {type: "selectbox", name: "kind",label:"Type",items:[
+                                {text:"Abstract",value:""},
+                                {text: "Key Takeaway", value: "callout--takeaway"}
+                            ]},
+                            {type:"input" , name:"label" , label:"Label"},
+                            {type:"textarea", name: "text", label: "Text"}
+                        ]
+                    },
+                    buttons: [{type: "submit", text:"Insert"}],
+                    onSubmit: (dialog) => {
+                        const d = dialog.getData();
+                        editor.insertContent(
+                            `<div class = "callout ${d.kind}"><p class = "callout__label">${d.label}</p><p>${d.text}</p></div>`
+                        );
+                        dialog.close();
+                    }
+                });
+            }
+        });
+
+        editor.ui.registry.addButton("katexblock", {
+            text: "Equation",
+            onAction: () => {
+                editor.windowManager.open({
+                    title:"Insert Equation",
+                    body: {type:"panel",items:[{type:"textarea", name:"latex", label: "LaTeX"}]},
+                    buttons: [{type: "submit", text: "Insert"}],
+                    onSubmit: (dialog) => {
+                        const latex = dialog.getData().latex.replace(/"/g, "&quot;");
+                        editor.insertContent(`<div class = "math-block-wrap" data-katex="${latex}"></div>`);
+                        dialog.close();
+                    }
+                });
+            }
+        });
+
+        editor.ui.registry.addButton("katexinline", {
+            text:"Inline Eq",
+            onAction: () => {
+                editor.windowManager.open({
+                    title:"Insert Inline Equation",
+                    body: {type:"panel", items:[{type:"input" , name:"latex" , label:"LaTeX"}]},
+                    buttons:[{type:"submit", text:"Insert"}],
+                    onSubmit: (dialog) => {
+                        const latex = dialog.getData().latex.replace(/"/g , "&quot;");
+                        editor.insertContent(`<span data-katex-inline="${latex}"></span>`);
+                        dialog.close();
+                    }
+                });
+            }
+        });
+
+        editor.ui.registry.addButton("codeblock", {
+            text:"Code",
+            onAction:()=>{
+                editor.windowManager.open({
+                    title: "Insert Code Block",
+                    body: {
+                        type:"panel",
+                        items:[
+                            {type:"input", name:"lang", label:"Language"},
+                            {type:"textarea", name:"code", label: "Code"}
+                        ]
+                    },
+                    buttons: [{type:"submit", text: "Insert"}],
+                    onSubmit: (dialog) => {
+                        const d = dialog.getData();
+                        const escaped = d.code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        editor.insertContent(`
+                            <div class = "code-block">
+                            <div class = "code-block__bar">
+                            <span class = "code-block__lang">${d.lang}</span>
+                            <button class = "copy-btn">Copy</button>
+                            </div>
+                            <pre class = "language-${d.lang}"><code class = "language-${d.lang}">${escaped}</code></pre>
+                            </div>
+                            `);
+                            dialog.close();
+                    }
+                });
+            }
+        });
+    }
+});
+
+function assignHeadingIds(html) {
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+    temp.querySelectorAll("h2 , h3").forEach((h) => {
+        if(!h.id) {
+            h.id = h.textContent.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
+        }
+    });
+    return temp.innerHTML
+}
 
 const form = document.getElementById("paper-form");
 const statusEl = document.getElementById("status");
@@ -182,7 +291,8 @@ form.addEventListener("submit", async (e) => {
         read_time: document.getElementById("read_time").value,
         date: document.getElementById("date").value,
         link: document.getElementById("link").value,
-        content_html: tinymce.get("content").getContent()
+        content_html: assignHeadingIds(tinymce.get("content").getContent()),
+        citations: document.getElementById("citations").value
     };
     try {
         const res = await fetch("/api/papers", {

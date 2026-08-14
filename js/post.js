@@ -13,6 +13,11 @@ async function loadPost() {
         const paper = await res.json();
         document.title = `Marginalia -- ${paper.title}`;
         const tagsHtml =paper.tags.split(",").map(t => `<span class = "tag-chip">${t.trim()}</span>`).join("");
+
+        const citeItems = (paper.citations || "").split("\n").filter(Boolean)
+            .map(c=>`<li>${c}</li>`).join("");
+        const citeHtml = citeItems ? `<div class = "citations"><h2>Citations</h2><ol>${citeItems}</ol></div>` : "";
+
         cont.innerHTML = `
         <div class = "post-meta">
         <span>${paper.date || "Coming Soon"}</span>
@@ -22,6 +27,7 @@ async function loadPost() {
         <h1 class = "post-title">${paper.title}</h1>
         <p class = "post-source">${paper.summary}</p>
         ${paper.content_html || "<p>No content added yet.</p>"}
+        ${citeHtml}
         <div class = "post-tags">${tagsHtml}</div>`;
 
         
