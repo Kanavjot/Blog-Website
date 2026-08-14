@@ -51,6 +51,13 @@ async function setup() {
     topics TEXT DEFAULT '')`
   );
 
+  await pool.query(`CREATE TABLE IF NOT EXISTS profiles(
+    id TEXT PRIMARY KEY,
+    role TEXT DEFAULT 'reader'
+    )`);
+
+    await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0`);
+
     const {rows} = await pool.query("SELECT COUNT(*) AS total FROM papers");
     const count = parseInt(rows[0].total, 10);
 
@@ -73,6 +80,8 @@ async function setup() {
       );
 
     }
+
+  
 }
 
 setup().catch(console.error);
