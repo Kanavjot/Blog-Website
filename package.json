@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Kanavjot/Blog-Website#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
     "better-sqlite3": "^13.0.2",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

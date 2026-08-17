@@ -10,8 +10,7 @@ console.log("Setting up database")
 
 async function setup() {
 
-//await pool.query("DROP TABLE IF EXISTS papers;"); Use if u gotta delete and re setup db
-
+//await pool.query("DROP TABLE IF EXISTS papers;"); ts is to reset the db when u need it
   await pool.query(`
     CREATE TABLE IF NOT EXISTS papers(
     id SERIAL PRIMARY KEY,
@@ -25,6 +24,7 @@ async function setup() {
     )`);
 
     await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS content_html TEXT DEFAULT ''`);
+    await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS citations TEXT DEFAULT ''`);
 
     await pool.query(
       `CREATE TABLE IF NOT EXISTS bookmarks (
@@ -56,7 +56,7 @@ async function setup() {
     role TEXT DEFAULT 'reader'
     )`);
 
-    await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0`);
+  await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0`);
 
     const {rows} = await pool.query("SELECT COUNT(*) AS total FROM papers");
     const count = parseInt(rows[0].total, 10);

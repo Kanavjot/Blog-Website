@@ -152,6 +152,18 @@ async function Dashview() {
 
 Dashview(); */
 
+const { NotBeforeError } = require("jsonwebtoken");
+
+let adminToken = null;
+
+async function bootAdmin() {
+    const {data} = await supabaseClient.auth.getSession();
+    if (!data.session) {location.href = "login.html" ; return;}
+    adminToken = data.session.access_token;
+    loadAdminPapers();
+}
+bootAdmin();
+
 const session = supabaseClient.auth.getSession();
 const token = session?.access_token;
 
@@ -297,7 +309,7 @@ form.addEventListener("submit", async (e) => {
     try {
         const res = await fetch("/api/papers", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: {"Content-Type": "application/json", Authorization : `Bearer ${adminToken}`},    
             body: JSON.stringify(payload)
     });
 
@@ -341,7 +353,7 @@ async function loadAdminPapers() {
         btn.addEventListener("click", async () => {
             const id = btn.dataset.id;
             if (!confirm("Delete this paper?")) return;
-            const res2 = await fetch(`/api/papers/${id}`, { method: "DELETE" });
+            const res2 = await fetch(`/api/papers/${id}`, { method: "DELETE", headers: {"Content-Type" : "application/json", Authorization : `Bearer ${adminToken}`}});
             if (res2.ok) {
                 loadAdminPapers();
             } else {

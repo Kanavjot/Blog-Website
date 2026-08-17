@@ -1,6 +1,8 @@
+require('dotenv').config();
 const db = require('./db');
-const cors = require("cors");
+const cors= require("cors");
 const express = require('express');
+const {createClient} = require('@supabase/supabase-js');
 const jwt = require("jsonwebtoken");
 const app = express();
 
@@ -8,19 +10,40 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-/*functions*/
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY,
+  {auth: {persistSession:false}}
+);
+
+
+
+/* old functions
+
 
 function getUserId (req) {
-  const token = (req.headers.authorization || "").replace("Bearer ", "");
+  
+  const authhead = req.headers.authorization || ""
+  console.log("Auth Header:", authhead ? "Header is there" : "Header is not there");
+  
+  const token = authhead.replace("Bearer ", "");
+
+ 
+
+  console.log("JWT Secret:" , process.env.SUPABASE_JWT_SECRET ? "Secret is loaded" : "Secret is undefined");
+
   const pd = jwt.verify(token ,process.env.SUPABASE_JWT_SECRET);
   return pd.sub;
-}
+} 
+
+
 
 function requireReader(req , res ,next) {
   try {
     req.userId = getUserId(req);
     next();
-  } catch {
+  } catch (err) {
+    console.error(err.message);
     res.status(401).json({error:"Not logged in"});
   }
 }
@@ -31,12 +54,70 @@ async function requireAdmin(req ,res , next) {
     if (rows[0]?.role !== "admin") return res.status(403).json({error: "Admin only"});
     req.userId = userId;
     next();
-  } catch {
+  } catch (err) {
+    console.error("err.message");
     res.status(401).json({error: "Not logged in"});
   }
 }
 
+*/
+
+/* new (debug) functions */
+
+async function getUserId(req) {
+  const token = (req.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
+  
+  if (!token) {
+    throw new Error("No Token")
+  }
+
+
+
+  const {data: {user}, error} = await supabase.auth.getUser(token);
+
+  if(error ||!user){
+    throw new Error(error?.message || "Invalid or expired token");
+  }
+  return user.id
+}
+
+
+
+async function requireReader(req, res,next) {
+  try {
+    req.userId = await getUserId(req);
+    next();
+
+  } catch (err) { 
+    console.error("Auth failed", err.message)
+    res.status(401).json({error: "Not logged in"});
+  }
+}
+
+
+
+
+
+async function requireAdmin(req,res , next) {
+  try {
+    const userId = await getUserId(req);
+    const {rows} = await db.query("SELECT role FROM profiles WHERE id = $1", [userId]);
+    const role = rows[0]?.role ? rows[0].role.trim() : "";
+    if (role !== "admin") {
+      return res.status(403).json({error: "Admin only"});
+    }
+
+    req.userId = userId;
+    next();
+  } catch (err) {
+    console.error("Admin auth failed", err.message);
+    res.status(401).json({error: "Not logged in"})
+  }
+}
+
+
 //profiles
+
 
 app.post("/api/ensure-profile" , requireReader , async(req , res) => {
     await db.query(`INSERT INTO profiles(id) VALUES ($1) ON CONFLICT DO NOTHING`, [req.userId]);
@@ -45,7 +126,10 @@ app.post("/api/ensure-profile" , requireReader , async(req , res) => {
 
 app.get("/api/is-admin" , requireReader , async(req, res) => {
   const { rows } = await db.query("SELECT role FROM profiles WHERE id = $1", [req.userId]);
-  res.json({ isAdmin: rows[0]?.role === "admin" });
+  const role = rows[0]?.role ? rows[0].role.trim() : "";
+  console.log("Db returned:", rows);
+  res.json({ isAdmin: role === "admin" });
+
 });
 
 /* papers*/
@@ -75,7 +159,7 @@ app.get("/api/papers/:id" , async(req, res) => {
 
 
 app.post("/api/papers", requireAdmin, async(req, res) => {
-  const{title, tags, difficulty , summary , read_time, date , link, content_html} = req.body;
+  const{title, tags, difficulty , summary , read_time, date , link, content_html , citations} = req.body;
   if (!title || !title.trim()) return res.status(400).json({error: "Title is required"});
   if(!tags || !tags.trim()) return res.status(400).json({error : "Tags are required"})
   if(!["beginner", "intermediate", "advanced"].includes(difficulty)) {
@@ -83,8 +167,8 @@ app.post("/api/papers", requireAdmin, async(req, res) => {
   }
 
   try{
-    const query = `INSERT INTO papers (title, tags, difficulty , summary, read_time , date , link , content_html)
-    VALUES ($1, $2, $3 , $4 , $5 , $6 , $7 , $8)
+    const query = `INSERT INTO papers (title, tags, difficulty , summary, read_time , date , link , content_html, citations)
+    VALUES ($1, $2, $3 , $4 , $5 , $6 , $7 , $8 , $9)
     RETURNING *`;
 
     const values = [
@@ -95,8 +179,11 @@ app.post("/api/papers", requireAdmin, async(req, res) => {
       read_time ? read_time.trim() : "",
       date ? date.trim() : "",
       link ? link.trim() : "",
-      content_html || ""
+      content_html || "",
+      citations ? citations.trim() : ""
     ];
+
+    
 
     const {rows} = await db.query(query, values);
     res.status(201).json(rows[0])
@@ -116,6 +203,7 @@ app.delete("/api/papers/:id" ,requireAdmin,  async(req,res) => {
     res.status(500).json({error: "Couldn't delete paper"});
   }
 });
+
 
 /*bookmarking routes*/
 
@@ -202,7 +290,7 @@ app.get("/api/admin/stats" , requireAdmin , async(req ,res) => {
 
     res.json({
       totalPapers: parseInt(papers.rows[0].count),
-      bydifficulty: byDiff.rows,
+      byDifficulty: byDiff.rows,
       totalReaders: parseInt(readers.rows[0].count),
       totalBookmarks : parseInt(bookmarks.rows[0].count),
       totalNotes: parseInt(notes.rows[0].count),
