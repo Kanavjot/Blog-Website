@@ -116,11 +116,15 @@ async function requireAdmin(req,res , next) {
 }
 
 
+
 //profiles
 
 
 app.post("/api/ensure-profile" , requireReader , async(req , res) => {
-    await db.query(`INSERT INTO profiles(id) VALUES ($1) ON CONFLICT DO NOTHING`, [req.userId]);
+    const name = req.body?.displayName || "";
+    await db.query(`INSERT INTO profiles (id, display_name) VALUES ($1, $2)
+      ON CONFLICT (id) DO UPDATE SET display_name = COALESCE(NULLIF($2, ''), )`, [req.userId , name]);
+
     res.json({success :true});
 });
 
@@ -158,6 +162,21 @@ app.get("/api/papers/:id" , async(req, res) => {
 });
 
 
+app.put("/api/papers/:id", requireAdmin, async(req, res) => {
+  const { title, tags,difficulty, summary ,read_time,date , content_html ,citations, published} = req.body;
+  if(!title || !title.trim()) return res.status(400).json({error: "Title is required"});
+
+  try {
+    const {rows} = await db.query(`UPDATE papers SET title=$1 , tag=$2 , difficulty=$3 , summary=$4 , read_time=$5, date=$6, content_html=$7, citations=$8 ,publlications=$9 WHERE id =$10 RETURNING *`,
+      [title.trim(), tags.trim(), difficulty, summary || "" ,read_time || "", date || "", content_html || "",  citations || "" ,  published !== false, req.params.id] 
+    );
+    if (!rows.length) return res.status(404).json({error:"Couldn't find the paper"});
+      res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error:"Couldn't update paper"})
+  }
+})
 
 app.post("/api/papers", requireAdmin, async(req, res) => {
   const{title, tags, difficulty , summary , read_time, date , link, content_html , citations} = req.body;

@@ -651,6 +651,18 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   font-size: 0.9rem;
 }
 
+.admin-btn {
+  background: var(--brick);
+  color: var(--bg-raised); 
+  border: none; padding: 0.3rem 0.7rem; 
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  margin: 0.3rem; 
+  cursor:pointer;
+}
+
+
+
 main.admin-dash{
   display:block;
   max-width: 52rem;

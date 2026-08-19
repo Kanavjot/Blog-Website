@@ -1,164 +1,7 @@
-/* fetch("/api/session-check").then(res = res.json()).then(auth =>{
-    if (!auth.loggedIn) window.location.href = "/login.html"
-
-});
-
-document.getElementById("logout-btn").addEventListener("click", async() => {
-    await fetch("/api/logout", {method: "POST"});
-    window.location.href = "/login.html"; //throwing them back to login
-});
-
-const aF = document.getElementById("paper-form");
-const UIF = document.getElementById("status");
-
-aF.addEventListener("submit", async(e) =>{
-    e.preventDefault();
-
-    const dI = {
-        title:document.getElementById("title").value.trim(),
-        tags:document.getElementById("tags").value.trim().toLowerCase(),
-        difficulty:document.getElementById("difficulty").value,
-        summary:document.getElementById("summary").value.trim(),
-        read_time:document.getElementById("read_time").value.trim(),
-        date: document.getElementById("date").value.trim(),
-        content:document.getElementById("content").value.trim()
-    };
-
-    if(dI.read_time && !dI.read_time.includes("min read")){
-        UIF.textContent = "Read time must include exactly 'min read' (e.g. '5 min read')"
-        UIF.style.color = "var(--brick)";
-        return;
-    }
-
-    //regex check
-
-    const dreg = /^\d{4}-\d{2}-\d{2}$/;
-    if (dI.date && !dreg.test(dI.date)) {
-        UIF.textContent = "Format date in the following format : YYYY-MM-DD.";
-        UIF.style = "var(--brick)";
-        return;
-    }
-
-    try{
-        const resObj = await fetch("/api/papers",{
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(dI)
-        });
-        const dbRes = await resObj.json();
-
-        if(!resObj.ok){
-            console.error("Backend Refused", dbRes);
-            throw new Error(dbRes.error || "Supabase ingestion failed");
-
-        }
-
-        UIF.textContent = `"${dbRes.title}" is live.`;
-        UIF.style.color = "var(--accent)";
-        aF.reset();
-
-        Dashview();
-
-    }
-    catch(postErr){
-        UIF.textContent = `Upload Failed. ${postErr.message}`;
-        UIF.style.color = "var(--brick)"
-
-    }
-});
-
-function cDashStats(dbRecords){
-    const statsW = document.getElementById("analytics-container");
-    const tC = dbRecords.length;
-    let uT = new Set();
-    let aC = 0;
-
-    dbRecords.forEach(record => {
-        if (record.tags) {
-            record.tags.split(",").forEach(t => {
-                const sanitized = t.trim();
-                if (sanitized)
-                    uT.add(sanitized);
-            });
-        }
-
-        if (record.difficulty === "advanced")aC++;
-
-    });
-
-    statsW.innerHTML =`
-    <div class = "stat-card">
-    <span class = "stat-num">${tC}</span>
-    <span class = "stat-label"> Total Papers</span>
-    </div>
-
-    <div class = "stat-card">
-    <span class = "stat-num">${uT.size}</span>
-    <span class = "stat-label">Unique Topics</span>
-
-    <div class = "stat-card">
-    <span class = "stat-num">${aC}</span>
-    <span class = "stat-label">Advanced Reads</span>
-    </div>
-    `;
-}
-
-async function Dashview() {
-    try{
-        const rawData = await fetch("/api/papers")
-        if (!rawData.ok) throw new Error("Couldn't pull from Postgres");
-        const activePapers = await rawData.json();
-        cDashStats(activePapers);
-
-        const lWrap = document.getElementById("papers-list")
-        lWrap.innerHTML = "";
-        
-        activePapers.forEach((p) => {
-            const lNode = document.createElement("div");
-            lNode.className = "paper-row";
-            lNode.innerHTML = `
-            <div>
-            <strong style = "color: var(--ink);font-family:var(--font-display); font-size: 1.1rem;">${p.title}</strong><br>
-            <span style = "font-size:0.8rem; color:var(--ink-faint); font-family:var(--font-mono);">${p.date || 'No Date'} &bull; ${p.difficulty}</span>
-            </div>
-            <button data-db-id="${p.id}" class = "delete-btn">Nuke It</button> `;
-            lWrap.appendChild(lNode);
-        });
-        
-        lWrap.querySelectorAll(".delete-btn").forEach((killBtn) => {
-            killBtn.addEventListener("click", async() => {
-                const targetId = killBtn.getAttribute("data-db-id");
-                if(!confirm("Are you 100% sure? This permanently deletes the paper from Supabase.")) return;
-
-                const delRes = await fetch(`/api/papers/${targetId}`, {method: "DELETE"});
-
-                if (delRes.ok) {
-                    Dashview();
-
-                } else{
-                    const errData = await delRes.json();
-                    alert(`Deletion Failed: ${errData.error || 'Unknown Network Error'}`);
-                }
-
-            });
-        });
-
-    }catch (fetchErr){
-        console.error("Dashboard hydration crashed:", fetchErr)
-
-    }
-
-}
-
-Dashview(); */
-
-
-
-
-
 let adminToken = null;
+let editingId = null;
 
-async function bootAdmin() {
+async function bootupAdmin() {
     const {data} = await supabaseClient.auth.getSession();
     if (!data.session) {location.href = "login.html" ; return;}
     adminToken = data.session.access_token;
@@ -169,7 +12,28 @@ async function bootAdmin() {
 
     loadAdminPapers();
 }
-bootAdmin();
+bootupAdmin();
+
+function fillForm(paper) {
+    editingId  =paper.id;
+    document.getElementById("title").value = paper.title;
+    document.getElementById("tags").value = paper.tags;
+    document.getElementById("difficulty").value = paper.difficulty;
+    document.getElementById("summary").value = paper.summary;
+    document.getElementById("read_time").value = paper.read_time;
+    document.getElementById("date").value = paper.date;
+    document.getElementById("citations").value = paper.citations || "";
+    tinymce.get("content").setContent(paper.content_html || "");
+    document.querySelector('button[type = "submit"]').textContent = "Save Changes";
+}
+
+
+function resetForm() {
+    editingId = null;
+    form.reset();
+    tinymce.get("content").setContent("");
+    document.querySelector('button[type ="submit"]').textContent = "Add Paper";
+}
 
 
 
@@ -301,9 +165,13 @@ form.addEventListener("submit", async (e) => {
         content_html: assignHeadingIds(tinymce.get("content").getContent()),
         citations: document.getElementById("citations").value
     };
+
+    const method = editingId ? "PUT" : "POST";
+    const url = editingId ? `/api/papers/${editingId}` : "/api/papers";
+
     try {
-        const res = await fetch("/api/papers", {
-            method: "POST",
+        const res = await fetch(url, {
+            method,
             headers: {"Content-Type": "application/json", Authorization : `Bearer ${adminToken}`},    
             body: JSON.stringify(payload)
     });
@@ -313,9 +181,10 @@ form.addEventListener("submit", async (e) => {
         throw new Error(data.error || "Something went wrong");
     }
 
-    statusEl.textContent = `Added "${data.title}" successfully!`;
+    statusEl.textContent = editingId?`Updated "${data.title}" successfully`:`Added "${data.title}" successfully`;
     statusEl.className = "success";
-    form.reset();
+    resetForm();
+    loadAdminPapers();
     } catch (err) {
         statusEl.textContent = err.message;
         statusEl.className = "error";
@@ -339,12 +208,20 @@ async function loadAdminPapers() {
             row.style.cssText = "display:flex;align-items:center; justify-content:space-between; border-bottom: 1px solid var(--rule); padding: 0.6rem 0";
             row.innerHTML = `
                 <span style = "font-size: 0.9rem; color:var(--ink);">${paper.title} </span>
-                <button data-id = "${paper.id}" style = "background: var(--brick); color: var(--bg-raised); border: none; padding: 0.3rem 0.7rem; border-radius: var(--radius);font-size: 0.8rem; cursor:pointer;">Delete</button>
+                <span>
+                    <button data-id = "${paper.id}" class = "edit-btn admin-btn">Edit</button>
+                    <button data-id = "${paper.id}" class = "delete-btn admin-btn">Delete</button>
+                </span>
             `;
+
+            row.querySelector(".edit-btn").addEventListener("click" , async() =>{
+                const rez = await fetch(`/api/papers/${paper.id}`);
+                fillForm(await rez.json());
+            });
             container.appendChild(row);
     });
     
-    container.querySelectorAll("button").forEach((btn) => {
+    container.querySelectorAll("delete-btn").forEach((btn) => {
         btn.addEventListener("click", async () => {
             const id = btn.dataset.id;
             if (!confirm("Delete this paper?")) return;
