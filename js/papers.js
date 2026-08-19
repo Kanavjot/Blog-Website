@@ -22,6 +22,7 @@ async function loadPapers() {
 function renderPapers(papers) {
     const list = document.getElementById("papersList");
     list.innerHTML = "";
+    const frag = document.createDocumentFragment
     papers.forEach((paper) => {
         const li = document.createElement("li");
         li.className = paper.link ? "entry" : "entry entry-soon";
@@ -49,8 +50,9 @@ function renderPapers(papers) {
             li.innerHTML = innerHtml;
         }
 
-        list.appendChild(li);
+        frag.appendChild(li);
     });
+        list.appendChild(frag)
         entries = document.querySelectorAll(".entry");
     }
 
@@ -76,7 +78,16 @@ filterBtns.forEach((btn) => {
     });
 });
 
-searchInput.addEventListener("input",applyFilters);
+
+function delayFilters(func, delay = 250) {
+    let timeoutId;
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+searchInput.addEventListener("input", delayFilters(applyFilters, 250));
 
     function applyFilters() {
         const q = searchInput.value.trim().toLowerCase();
@@ -97,3 +108,4 @@ searchInput.addEventListener("input",applyFilters);
 
         noResults.hidden = shown > 0;
     }
+

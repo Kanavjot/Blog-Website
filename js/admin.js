@@ -152,7 +152,9 @@ async function Dashview() {
 
 Dashview(); */
 
-const { NotBeforeError } = require("jsonwebtoken");
+
+
+
 
 let adminToken = null;
 
@@ -160,22 +162,15 @@ async function bootAdmin() {
     const {data} = await supabaseClient.auth.getSession();
     if (!data.session) {location.href = "login.html" ; return;}
     adminToken = data.session.access_token;
+
+    const ifAdmin =await fetch("/api/is-admin", {headers: {Authorization: `Bearer ${adminToken}`}});
+    const adData = await ifAdmin.json();
+    if (!adData.isAdmin) {window.location.href = "login.html"; return;}
+
     loadAdminPapers();
 }
 bootAdmin();
 
-const session = supabaseClient.auth.getSession();
-const token = session?.access_token;
-
-fetch("/api/is-admin", {
-    headers: {Authorization: `Bearer ${token}`}
-})
-.then(r=> r.json())
-.then(data => {
-    if (!data.isAdmin) {
-        window.location.href = "login.html"
-    }
-})
 
 
 tinymce.init({

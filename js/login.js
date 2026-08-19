@@ -23,6 +23,12 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
             msg.textContent = "This account isn't an admin account";
             msg.style.color = "var(--brick)";
             await supabaseClient.auth.signOut({scope:'local'});
+            async function JWTcheckup () {
+                res34 = await db.query
+                if (res34 === isAdmin) {
+                    res5 = await db.query
+                }
+            }
         }
     }
 });

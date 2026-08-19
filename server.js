@@ -127,10 +127,11 @@ app.post("/api/ensure-profile" , requireReader , async(req , res) => {
 app.get("/api/is-admin" , requireReader , async(req, res) => {
   const { rows } = await db.query("SELECT role FROM profiles WHERE id = $1", [req.userId]);
   const role = rows[0]?.role ? rows[0].role.trim() : "";
-  console.log("Db returned:", rows);
   res.json({ isAdmin: role === "admin" });
 
 });
+
+
 
 /* papers*/
 

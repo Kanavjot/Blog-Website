@@ -584,6 +584,7 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   text-transform: uppercase
 }
 
+
 .stats-row{
   gap:1rem;
   display: flex;
@@ -608,6 +609,90 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
 .stat-box span{
   font-size: 0.75rem;
   color:var(--ink-faint);
+}
+
+.stat-grid {
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0 2 rem;
+}
+
+.stat-card{
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+  text-align:center
+}
+
+.stat-card span {
+  color:var(--ink-faint);
+  font-size :0.75rem
+}
+
+.stat-card strong {
+  display: block;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-family: var(--font-mono);
+}
+
+.top-list {
+  list-style: none;
+  padding: 0
+
+}
+
+.top-list li {
+  display : flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding:0.5rem 0;
+  font-size: 0.9rem;
+}
+
+main.admin-dash{
+  display:block;
+  max-width: 52rem;
+}
+
+.admin-dash {
+  max-width: 48rem;
+  margin : 2rem auto;
+  font-family :var(--font-ui)
+}
+
+.admin-dash h1{
+  font-family: var(--font-display);
+  color: var(--ink)
+}
+
+
+.admin-dash h2 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  margin-top: 2rem;
+  font-size: 1.1rem
+}
+.cheats-wrap {
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+}
+
+.cheats-wrap summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink)
+}
+
+.cheats-content {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color :var(--ink-soft);
+  gap: 2rem;
 }
 
 .tabs {
