@@ -1,13 +1,18 @@
 //reader-dashboard
 const ALL_TOPICS =["ml" , "physics" , "biotech","quantum" ,"genetics"]
-let token = null;
 
-function authed(opts = {}) {
-  return { ...opts, headers: { ...(opts.headers || {}), Authorization: `Bearer ${token}` }};
+
+async function authHeader() {
+    const { data} = await supabaseClient.auth.getSession();
+    if(!data.session) { location.href = "reader-login.html" ;throw new Error("no session"); }
+    return {Authorization: `Bearer ${data.session.access_token}`};
+
 }
 
+
+
 async function loadLibrary() {
-    const res = await fetch("/api/bookmarks", authed());
+    const res = await fetch("/api/bookmarks", {headers:{"Content-Type":"application/json", ...(await authHeader())}});
     const papers = await res.json();
     document.getElementById("stat-saved").textContent = papers.length;
 
@@ -27,7 +32,7 @@ async function loadLibrary() {
         <button class = "remove-btn" data-id="${p.id}">Remove</button>`;
 
         row.querySelector("button").addEventListener("click", async() => {
-            await fetch(`/api/bookmarks/${p.id}`, authed({method: "DELETE"}));
+            await fetch(`/api/bookmarks/${p.id}`,{method: "DELETE" , headers: {"Content-Type":"application/json" , ...(await authHeader())}} );
             loadLibrary();
         });
         list.appendChild(row);
@@ -35,8 +40,9 @@ async function loadLibrary() {
 }
 
 
+
 async function loadTopics() {
-    const res = await fetch("/api/preferences", authed());
+    const res = await fetch("/api/preferences", {headers: {"Content-Type": "application/json" , ...(await authHeader())}});
     const prefs = await res.json();
     const active = (prefs.topics || "").split(",").map(t => t.trim()).filter(Boolean);
     const wrap = document.getElementById("topic-toggles");
@@ -48,18 +54,18 @@ async function loadTopics() {
         btn.addEventListener("click" , async() => {
             btn.classList.toggle("on");
             const chosen = [...wrap.querySelectorAll(".topic-toggle.on")].map(b => b.textContent);
-            await fetch("/api/preferences" , authed({
+            await fetch("/api/preferences" , {
                 method: "PUT",
-                headers: {"Content-Type": "application/json"},
+                headers: {"Content-Type": "application/json" , ...(await authHeader())},
                 body: JSON.stringify({topics:chosen.join(",")})
-            }));
+            });
         });
         wrap.appendChild(btn);
     })
 }
 
 async function loadNotes() {
-    const res = await fetch("/api/notes", authed());
+    const res = await fetch("/api/notes", {headers: {"Content-Type" : "application/json" , ...(await authHeader())}});
     const notes = await res.json();
     document.getElementById("stat-notes").textContent = notes.length;
     const list = document.getElementById("notes-list");
@@ -76,14 +82,17 @@ document.getElementById("note-form").addEventListener("submit",async(e) => {
     e.preventDefault();
     const content = document.getElementById("note-content").value;
     if(!content.trim()) return;
-    await fetch("/api/notes", authed ({
+    await fetch("/api/notes",{
         method: "POST",
-        headers: {"Content-Type" : "application/json"},
+        headers: {"Content-Type" : "application/json", ...(await authHeader())},
         body: JSON.stringify({content})
-    }));
+    });
     document.getElementById("note-content").value  = "";
     loadNotes();
 });
+
+
+
 
 document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -104,12 +113,13 @@ async function boot() {
         location.href = "reader-login.html";
         return;
     }
-    token =data.session.access_token;
+
     document.getElementById("user-name").textContent = data.session.user.user_metadata?.display_name || data.session.user.email
     
     loadLibrary();
     loadTopics();
     loadNotes();
+
 }
 
 boot();

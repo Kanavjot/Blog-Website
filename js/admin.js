@@ -1,17 +1,23 @@
-let adminToken = null;
 let editingId = null;
 
-async function bootupAdmin() {
-    const {data} = await supabaseClient.auth.getSession();
-    if (!data.session) {location.href = "login.html" ; return;}
-    adminToken = data.session.access_token;
+async function authHeader() {
+    const{data} = await supabaseClient.auth.getSession();
+    if (!data.session) {location.href = "login.html"; throw new Error("no session");}
+    return {Authorization: `Bearer ${data.session.access_token}`};
+}
 
-    const ifAdmin =await fetch("/api/is-admin", {headers: {Authorization: `Bearer ${adminToken}`}});
+async function bootupAdmin() {
+    const ifAdmin = await fetch("/api/is-admin", {headers: await authHeader()});
     const adData = await ifAdmin.json();
     if (!adData.isAdmin) {window.location.href = "login.html"; return;}
 
     loadAdminPapers();
 }
+
+
+
+
+
 bootupAdmin();
 
 function fillForm(paper) {
@@ -28,6 +34,8 @@ function fillForm(paper) {
     tinymce.get("content").setContent(paper.content_html || "");
     document.querySelector('button[type = "submit"]').textContent = "Save Changes";
 }
+
+
 
 
 function resetForm() {
@@ -175,7 +183,7 @@ form.addEventListener("submit", async (e) => {
     try {
         const res = await fetch(url, {
             method,
-            headers: {"Content-Type": "application/json", Authorization : `Bearer ${adminToken}`},    
+            headers: {"Content-Type": "application/json", ...(await authHeader())},    
             body: JSON.stringify(payload)
     });
 
@@ -218,7 +226,7 @@ async function loadAdminPapers() {
             `;
 
             row.querySelector(".edit-btn").addEventListener("click" , async() =>{
-                const rez = await fetch(`/api/papers/${paper.id}`);
+                const rez = await fetch(`/api/papers/${paper.id}`, {headers: {"Content-Type": "application/json", ...(await authHeader())}});
                 fillForm(await rez.json());
             });
             container.appendChild(row);
@@ -228,7 +236,8 @@ async function loadAdminPapers() {
         btn.addEventListener("click", async () => {
             const id = btn.dataset.id;
             if (!confirm("Delete this paper?")) return;
-            const res2 = await fetch(`/api/papers/${id}`, { method: "DELETE", headers: {"Content-Type" : "application/json", Authorization : `Bearer ${adminToken}`}});
+            const res2 = await fetch(`/api/papers/${id}`, { method: "DELETE", headers: {"Content-Type" : "application/json", ...(await authHeader())}});
+
             if (res2.ok) {
                 loadAdminPapers();
             } else {
