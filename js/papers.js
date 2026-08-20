@@ -25,9 +25,12 @@ function renderPapers(papers) {
     const frag = document.createDocumentFragment
     papers.forEach((paper) => {
         const li = document.createElement("li");
-        li.className = paper.link ? "entry" : "entry entry-soon";
-        li.dataset.tags = paper.tags.replace(/\s/g, "");
+
+        const url = `post.htmk?id = ${paper.id}`;
+        li.className = paper.published ? "entry" : "entry entry-soon"
+        li.dataset.tags = paper.tags.replace(/\s/g , "");
         li.dataset.difficulty = paper.difficulty;
+
 
         const tagsHtml = paper.tags.split(",").map(t => `<span class = "tag-chip">${t.trim()}</span>`).join("");
 
@@ -44,6 +47,8 @@ function renderPapers(papers) {
             </div>
         `;
 
+        li.innerHTML = paper.published ? `<a href = "$url}">${innerHTML}</a>` : innerHtml;
+        
         if (paper.link) {
             li.innerHTML = `<a href="${paper.link}">${innerHtml}</a>`;
         } else {

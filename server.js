@@ -167,7 +167,7 @@ app.put("/api/papers/:id", requireAdmin, async(req, res) => {
   if(!title || !title.trim()) return res.status(400).json({error: "Title is required"});
 
   try {
-    const {rows} = await db.query(`UPDATE papers SET title=$1 , tag=$2 , difficulty=$3 , summary=$4 , read_time=$5, date=$6, content_html=$7, citations=$8 ,publlications=$9 WHERE id =$10 RETURNING *`,
+    const {rows} = await db.query(`UPDATE papers SET title=$1 , tag=$2 , difficulty=$3 , summary=$4 , read_time=$5, date=$6, content_html=$7, citations=$8 ,published=$9 WHERE id =$10 RETURNING *`,
       [title.trim(), tags.trim(), difficulty, summary || "" ,read_time || "", date || "", content_html || "",  citations || "" ,  published !== false, req.params.id] 
     );
     if (!rows.length) return res.status(404).json({error:"Couldn't find the paper"});

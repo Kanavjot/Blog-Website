@@ -661,6 +661,12 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   cursor:pointer;
 }
 
+.checkbox {
+  display:flex;
+  align-items: center;
+  gap:0.5rem;
+  margin-bottom: 1rem;
+}
 
 
 main.admin-dash{

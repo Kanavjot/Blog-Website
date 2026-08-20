@@ -57,8 +57,8 @@ async function setup() {
     )`);
 
   await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0`);
-  await pool.query(`ALTER TABLES profiles ADD COLUMN IF NOT EXISTS display_name TEXT DEFAULT ''`);
-
+  await pool.query(`ALTER TABLE profiles ADD COLUMN IF NOT EXISTS display_name TEXT DEFAULT ''`);
+  await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS published BOOLEAN DEFAULT true`)
     const {rows} = await pool.query("SELECT COUNT(*) AS total FROM papers");
     const count = parseInt(rows[0].total, 10);
 
