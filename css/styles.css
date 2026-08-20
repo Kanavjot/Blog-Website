@@ -667,7 +667,18 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   gap:0.5rem;
   margin-bottom: 1rem;
 }
+.bookmark-btn {
+  color: var(--ink);
+  border : 1px solid var(--rule-strong);
+  border-radius : var(--radius);
+  padding :0.3rem 0.7rem;
+  margin: 0.6rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  background: none;
+  cursor: pointer;
 
+}
 
 main.admin-dash{
   display:block;

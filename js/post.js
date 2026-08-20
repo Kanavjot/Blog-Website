@@ -1,3 +1,10 @@
+async function authHeader() {
+    const { data} = await supabaseClient.auth.getSession();
+    if(!data.session) return null;
+    return {Authorization: `Bearer ${data.session.access_token}`};
+
+}
+
 async function loadPost() {
     const params = new URLSearchParams(location.search);
     const id = params.get("id");
@@ -30,7 +37,8 @@ async function loadPost() {
         ${citeHtml}
         <div class = "post-tags">${tagsHtml}</div>`;
 
-        
+        await Bookmark(paper.id);
+
         renderMath();
         renderCopybtn();
         buildTOC();
@@ -38,6 +46,34 @@ async function loadPost() {
         console.error(err);
         cont.innerHTML = `<p class = "home-loading">Couldn't load this paper.</p>`
     }
+}
+
+async function Bookmark(paperId) {
+    const headers = await authHeader();
+    if (!headers) return;
+
+    const rez =await fetch("/api/bookmarks" , {headers});
+    const bookmarks = await rez.json()
+    let saved = bookmarks.some(b=> b.id == paperId);
+
+    const btn = document.createElement("button");
+    btn.textContent = saved ? "Saved ★" : "Save ☆";
+    btn.className = "bookmark-btn"
+    btn.addEventListener("click" , async () => {
+        const currheaders = await authHeader();
+        const method = saved ? "DELETE" : "POST";
+        const url = saved ? `/api/bookmarks/${paperId}` : "/api/bookmarks";
+        await fetch( url , {
+            method,
+            headers: {"Content-Type" : "application/json" , ...currheaders},
+            body: method ==="POST" ? JSON.stringify({paper_id: paperId}) : undefined
+        });
+        saved = !saved;
+        btn.textContent = saved ? "Saved ★" : "Save ☆"
+    })
+
+    
+    document.getElementById("post-main").prepend(btn)
 }
 
 loadPost();
