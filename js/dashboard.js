@@ -34,6 +34,7 @@ async function loadLibrary() {
     });
 }
 
+
 async function loadTopics() {
     const res = await fetch("/api/preferences", authed());
     const prefs = await res.json();
@@ -104,8 +105,8 @@ async function boot() {
         return;
     }
     token =data.session.access_token;
-    document.getElementById("user-name").textContent = data.session.user.email;
-
+    document.getElementById("user-name").textContent = data.session.user.user_metadata?.display_name || data.session.user.email
+    
     loadLibrary();
     loadTopics();
     loadNotes();

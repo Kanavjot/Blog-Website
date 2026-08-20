@@ -22,7 +22,9 @@ function fillForm(paper) {
     document.getElementById("summary").value = paper.summary;
     document.getElementById("read_time").value = paper.read_time;
     document.getElementById("date").value = paper.date;
+    document.getElementById("link").value = paper.link;
     document.getElementById("citations").value = paper.citations || "";
+    document.getElementById("published").checked = Boolean(paper.published);
     tinymce.get("content").setContent(paper.content_html || "");
     document.querySelector('button[type = "submit"]').textContent = "Save Changes";
 }
@@ -163,7 +165,8 @@ form.addEventListener("submit", async (e) => {
         date: document.getElementById("date").value,
         link: document.getElementById("link").value,
         content_html: assignHeadingIds(tinymce.get("content").getContent()),
-        citations: document.getElementById("citations").value
+        citations: document.getElementById("citations").value,
+        published: document.getElementById("published").checked
     };
 
     const method = editingId ? "PUT" : "POST";
@@ -221,7 +224,7 @@ async function loadAdminPapers() {
             container.appendChild(row);
     });
     
-    container.querySelectorAll("delete-btn").forEach((btn) => {
+    container.querySelectorAll(".delete-btn").forEach((btn) => {
         btn.addEventListener("click", async () => {
             const id = btn.dataset.id;
             if (!confirm("Delete this paper?")) return;
@@ -237,5 +240,3 @@ async function loadAdminPapers() {
     console.error("Error loading admin papers:",err);
     }
 }
-
-loadAdminPapers();

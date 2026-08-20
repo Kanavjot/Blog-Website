@@ -4,7 +4,7 @@ async function loadHome() {
     const papers = await res.json();
 
     renderStats(papers);
-    const featuredPaper = papers.find((p) => p.link && p.link.trim() !== "");
+    const featuredPaper = papers.find((p) => p.published);
 
     if (featuredPaper) {
       renderHeroPreview(featuredPaper);
@@ -29,11 +29,11 @@ async function loadHome() {
 function renderHeroPreview(paper) {
   const box = document.getElementById("hero-preview");
   if(!box) return;
-
+  const url = `post.html?id=${paper.id}`
   const tagsHtml = paper.tags.split(",").map(t => t.trim()).join(" &middot; ");
   box.innerHTML = `<div class = preview-meta>
   <span class = "pulse-dot"></span>LATEST PREVIEW</div>
-  <h3>${paper.link? `<a href = "${paper.link}" class = "hero-title-link">${paper.title}</a>` : paper.title}</h3>
+  <h3>${paper.published? `<a href = "${url}" class = "hero-title-link">${paper.title}</a>` : paper.title}</h3>
   <p class = "preview-snippet">${paper.summary || "Summary coming soon..."}</p>
   <div class = "hero-margin-note hero-margin-note--accent note-1">
   <span class = "note-label">Tags</span>
@@ -96,7 +96,8 @@ function renderRecent(papers) {
 
   papers.forEach((paper) => {
     const li = document.createElement("div");
-    li.className = paper.link ? "entry" : "entry entry-soon";
+    const url = `post.html?id=${paper.id}`;
+    li.className = paper.published ? "entry" : "entry entry-soon";
 
     const tagsHtml = paper.tags.split(",").map(t => `<span class="tag-chip">${t.trim()}</span>`).join("");
 
@@ -111,7 +112,7 @@ function renderRecent(papers) {
       <div class="entry-tags">${tagsHtml}</div>
     `;
 
-    li.innerHTML = paper.link ? `<a href="${paper.link}">${innerHtml}</a>` : innerHtml;
+    li.innerHTML = paper.published ? `<a href="${url}">${innerHtml}</a>` : innerHtml;
     container.appendChild(li);
   });
 }
