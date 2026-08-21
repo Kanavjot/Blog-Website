@@ -73,7 +73,14 @@ async function loadNotes() {
     notes.forEach((n) => {
         const item = document.createElement("div");
         item.className = "note-item";
-        item.innerHTML = `<p>${n.content}</p><small>${n.paper_title || "General"} ${new Date(n.created_at).toLocaleDateString()}</small>`;
+        item.innerHTML = `<p>${n.content}</p>
+        <small>${n.paper_title || "General"} ${new Date(n.created_at).toLocaleDateString()}</small>
+        <button class = "remove-btn" style="margin:0.6rem;">Remove</button>`;
+        item.querySelector("button").addEventListener("click", async() => {
+            await fetch(`/api/notes/${n.id}`, {method: "DELETE" , headers: await authHeader()});
+            
+        });
+        loadNotes();
         list.appendChild(item);
     });
 }
