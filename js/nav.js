@@ -1,5 +1,6 @@
 //builds and injects site header on every page
 
+
 async function renderNav() {
     const page = location.pathname.split("/").pop() || "index.html";
 
@@ -27,7 +28,7 @@ async function renderNav() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${data.session.access_token}`},
           body: JSON.stringify({displayName: data.session.user.user_metadata?.display_name || ""})
-      }).catch(() => {});
+      }).then(r => r.json()).then(console.log).catch(console.error);
     }
   } catch (err) {
     console.error("session check failed", err);

@@ -123,10 +123,12 @@ async function requireAdmin(req,res , next) {
 app.post("/api/ensure-profile" , requireReader , async(req , res) => {
     const name = req.body?.displayName || "";
     await db.query(`INSERT INTO profiles (id, display_name) VALUES ($1, $2)
-      ON CONFLICT (id) DO UPDATE SET display_name = COALESCE(NULLIF($2, ''), )`, [req.userId , name]);
+      ON CONFLICT (id) DO UPDATE SET display_name = COALESCE(NULLIF($2, ''))`, [req.userId , name]);
 
     res.json({success :true});
+    
 });
+
 
 app.get("/api/is-admin" , requireReader , async(req, res) => {
   const { rows } = await db.query("SELECT role FROM profiles WHERE id = $1", [req.userId]);
