@@ -76,6 +76,7 @@ function renderPapers(papers, userTopics =[]) {
             <p class = "entry-summary">${paper.summary}</p>
             <div class="entry-tags">
                 ${tagsHtml}
+            <span hidden>${stripHtml(paper.content_html)}</span>
             </div>
         `;
         li.innerHTML = paper.published ? `<a href = "${url}">${innerHtml}</a>` : innerHtml;
@@ -110,6 +111,11 @@ filterBtns.forEach((btn) => {
     });
 });
 
+function stripHtml(html) {
+    const d = document.createElement("div");
+    d.innerHTML = html || "";
+    return d.textContent || "";
+}
 
 function delayFilters(func, delay = 250) {
     let timeoutId;

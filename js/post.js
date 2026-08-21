@@ -25,6 +25,8 @@ async function loadPost() {
             .map(c=>`<li>${c}</li>`).join("");
         const citeHtml = citeItems ? `<div class = "citations"><h2>Citations</h2><ol>${citeItems}</ol></div>` : "";
 
+        const cleanContent =DOMPurify.sanitize(paper.content_html || "<p>No content added yet.</p>")
+
         cont.innerHTML = `
         <div class = "post-meta">
         <span>${paper.date || "Coming Soon"}</span>

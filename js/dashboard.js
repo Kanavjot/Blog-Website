@@ -1,3 +1,5 @@
+
+
 //reader-dashboard
 const ALL_TOPICS =["ml" , "physics" , "biotech","quantum" ,"genetics"]
 
@@ -75,13 +77,14 @@ async function loadNotes() {
         item.className = "note-item";
         item.innerHTML = `<p>${n.content}</p>
         <small>${n.paper_title || "General"} ${new Date(n.created_at).toLocaleDateString()}</small>
-        <button class = "remove-btn" style="margin:0.6rem;">Remove</button>`;
+        <button class = "remove-btn" style="margin:0.6rem;cursor:pointer;">Remove</button>`;
         item.querySelector("button").addEventListener("click", async() => {
             await fetch(`/api/notes/${n.id}`, {method: "DELETE" , headers: await authHeader()});
-            
+             loadNotes();
         });
-        loadNotes();
+       
         list.appendChild(item);
+    
     });
 }
 
