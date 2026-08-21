@@ -671,10 +671,10 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   color: var(--ink);
   border : 1px solid var(--rule-strong);
   border-radius : var(--radius);
-  padding :0.3rem 0.7rem;
-  margin: 0.6rem;
+  padding :0.6rem 0.7rem;
+  margin: 0rem;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 0.2rem;
   background: none;
   cursor: pointer;
 
@@ -1047,6 +1047,11 @@ code.inline {
   border-radius: 999px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+.tag-chip.matched {
+  color: var(--bg-raised);
+  background: var(--accent);
 }
 
 .update-entry {

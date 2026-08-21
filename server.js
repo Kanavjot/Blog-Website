@@ -126,7 +126,7 @@ app.post("/api/ensure-profile" , requireReader , async(req , res) => {
       ON CONFLICT (id) DO UPDATE SET display_name = COALESCE(NULLIF($2, ''))`, [req.userId , name]);
 
     res.json({success :true});
-    
+
 });
 
 

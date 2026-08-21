@@ -1,37 +1,29 @@
-async function loadHome() {
-  try {
-    const res = await fetch("/api/papers");
-    const papers = await res.json();
+async function userPrefs() {
+  const {data} = await supabaseClient.auth.getSession();
+  if (!data?.session) return [];
 
-    renderStats(papers);
-    const featuredPaper = papers.find((p) => p.published);
+  const rez = await fetch("/api/preferences", {
+    headers: {"Content-Type" : "application/json", Authorization: `Bearer ${data.session.access_token}`}
 
-    if (featuredPaper) {
-      renderHeroPreview(featuredPaper);
-      const recentPapers = papers.filter((p) => p.id !== featuredPaper.id).slice(0, 4);
-      renderRecent(recentPapers);
-    } else {
-      if (papers.length > 0) {
-        renderHeroPreview(papers[0]);
-        renderRecent(papers.slice(1, 5));
-      } else {
-        renderRecent([]);
-      }
-    }
+  });
+  if (!rez.ok) return [];
 
-  } catch (err) {
-    console.error("Failed to load homepage papers:", err);
-    document.getElementById("recent-papers").innerHTML =
-      `<p class="home-loading">Couldn't load papers right now.</p>`;
-  }
+  const prefs = await rez.json();
+  return (prefs.topics || "")
+    .split(",")
+    .map((m) => m.trim().toLowerCase())
+    .filter(Boolean)   
 }
+
+
+
 
 function renderHeroPreview(paper) {
   const box = document.getElementById("hero-preview");
   if(!box) return;
   const url = `post.html?id=${paper.id}`
   const tagsHtml = paper.tags.split(",").map(t => t.trim()).join(" &middot; ");
-  box.innerHTML = `<div class = preview-meta>
+  box.innerHTML = `<div class = "preview-meta">
   <span class = "pulse-dot"></span>LATEST PREVIEW</div>
   <h3>${paper.published? `<a href = "${url}" class = "hero-title-link">${paper.title}</a>` : paper.title}</h3>
   <p class = "preview-snippet">${paper.summary || "Summary coming soon..."}</p>
@@ -85,12 +77,15 @@ function animateNum(elementId , targetNum) {
   }, stepTime);
 }
 
-function renderRecent(papers) {
-  const container = document.getElementById("recent-papers");
-  container.innerHTML = "";
+
+
+function renderRecent(papers, userTopics= []) {
+  const cont = document.getElementById("recent-papers");
+  if (!cont) return;
+  cont.innerHTML = "";
 
   if (papers.length === 0) {
-    container.innerHTML = `<p class="home-loading">Nothing here yet — check the full archive.</p>`;
+    cont.innerHTML = `<p class="home-loading">Nothing here yet — check the full archive.</p>`;
     return;
   }
 
@@ -99,7 +94,12 @@ function renderRecent(papers) {
     const url = `post.html?id=${paper.id}`;
     li.className = paper.published ? "entry" : "entry entry-soon";
 
-    const tagsHtml = paper.tags.split(",").map(t => `<span class="tag-chip">${t.trim()}</span>`).join("");
+    const tagsHtml = paper.tags.split(",").map((t) => {
+      const cl = t.trim();
+      const corresponds = userTopics.includes(cl.toLowerCase());
+      return `<span class="tag-chip${corresponds? " matched" : ""}">${cl}</span>`;
+    }).join("");
+
 
     const innerHtml = `
       <div class="entry-meta">
@@ -113,8 +113,51 @@ function renderRecent(papers) {
     `;
 
     li.innerHTML = paper.published ? `<a href="${url}">${innerHtml}</a>` : innerHtml;
-    container.appendChild(li);
+    cont.appendChild(li);
   });
+}
+
+async function loadHome() {
+  try {
+    const res = await fetch("/api/papers");
+    const papers = await res.json();
+
+    renderStats(papers);
+    const userTopics = await userPrefs().catch(() => []);
+    const featuredPaper = papers.find((p) => p.published);
+    let remainingPapers = [];
+    
+
+    if (featuredPaper) {
+      renderHeroPreview(featuredPaper);
+      remainingPapers = papers.filter((p) =>p.id !== featuredPaper.id);
+    } else {
+      if (papers.length > 0) {
+        renderHeroPreview(papers[0]);
+        remainingPapers = papers.slice(1);
+      } else {
+        renderRecent([], userTopics);
+        return;
+      }
+    }
+
+    if (userTopics.length>0) {
+      remainingPapers.sort((a,b) => {
+        const aTags = (a.tags || "").toLowerCase().split(",").map((t) => t.trim());
+        const bTags= (b.tags || "").toLowerCase().split(",").map((t) => t.trim());
+        const aMatches = aTags.filter((t) => userTopics.includes(t)).length;
+        const bMatches = bTags.filter((t) => userTopics.includes(t)).length
+        return bMatches- aMatches;
+      })
+    }
+    renderRecent(remainingPapers.slice(0,4), userTopics);
+    
+  } catch (err) {
+    console.error("Failed to load homepage papers:", err);
+    document.getElementById("recent-papers").innerHTML =
+      `<p class="home-loading">Couldn't load papers right now.</p>`;
+
+  }
 }
 
 loadHome();

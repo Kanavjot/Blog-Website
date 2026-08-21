@@ -1,38 +1,70 @@
 ///archive page filtering - search + tags + difficulty pills
 
-const searchInput = document.getElementById("search-input");
-const filterBtns = document.querySelectorAll(".pill");
+
+
 let entries = document.querySelectorAll(".entry");
 const noResults = document.getElementById("no-results");
 
 let allPapers = []
 
 async function loadPapers() {
-  try {
     const res = await fetch("/api/papers");
-    if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+    if (!res.ok) return;
     const data = await res.json();
     allPapers = data;
-    renderPapers(allPapers);
-  } catch (err) {
-    console.error("Failed to load papers:", err);
-  }
+    
+    const userTopics = await userPrefs().catch(() => []);
+
+    if (userTopics.length > 0) {
+        allPapers.sort((a,b) => {
+            const aTags = (a.tags || "").toLowerCase().split(",").map((t) => t.trim());
+            const bTags = (b.tags || "").toLowerCase().split(",").map((t) => t.trim());
+            const aMatches = aTags.filter((t) => userTopics.includes(t)).length;
+            const bMatches = bTags.filter((t) => userTopics.includes(t)).length;
+            return bMatches- aMatches;
+        });
+    }
+  renderPapers(allPapers, userTopics)
+  
 }
 
-function renderPapers(papers) {
+async function userPrefs() {
+  const {data} = await supabaseClient.auth.getSession();
+  if (!data?.session) return [];
+
+  const rez = await fetch("/api/preferences", {
+    headers: {"Content-Type" : "application/json", Authorization: `Bearer ${data.session.access_token}`}
+
+  });
+  if (!rez.ok) return [];
+
+  const prefs = await rez.json();
+  return (prefs.topics || "")
+    .split(",")
+    .map((m) => m.trim().toLowerCase())
+    .filter(Boolean)   
+}
+
+
+function renderPapers(papers, userTopics =[]) {
     const list = document.getElementById("papersList");
     list.innerHTML = "";
-    const frag = document.createDocumentFragment
+    const frag = document.createDocumentFragment();
     papers.forEach((paper) => {
-        const li = document.createElement("li");
+    const li = document.createElement("li")
+        const url = `post.html?id=${paper.id}`;
 
-        const url = `post.htmk?id = ${paper.id}`;
+
         li.className = paper.published ? "entry" : "entry entry-soon"
         li.dataset.tags = paper.tags.replace(/\s/g , "");
         li.dataset.difficulty = paper.difficulty;
 
-
-        const tagsHtml = paper.tags.split(",").map(t => `<span class = "tag-chip">${t.trim()}</span>`).join("");
+        const tagsHtml = paper.tags.split(",").map((t) => {
+            const cl = t.trim();
+            if (!cl) return "";
+            const corresponds = userTopics.includes(cl.toLowerCase());
+            return `<span class="tag-chip${corresponds ? " matched": ""}">${cl}</span>`;
+        }).join("");
 
         const innerHtml = `
             <div class="entry-meta">
@@ -46,15 +78,8 @@ function renderPapers(papers) {
                 ${tagsHtml}
             </div>
         `;
-
-        li.innerHTML = paper.published ? `<a href = "$url}">${innerHTML}</a>` : innerHtml;
+        li.innerHTML = paper.published ? `<a href = "${url}">${innerHtml}</a>` : innerHtml;
         
-        if (paper.link) {
-            li.innerHTML = `<a href="${paper.link}">${innerHtml}</a>`;
-        } else {
-            li.innerHTML = innerHtml;
-        }
-
         frag.appendChild(li);
     });
         list.appendChild(frag)
@@ -65,6 +90,8 @@ loadPapers();
 
 let tagFilter = "all";
 let diffFilter = "all";
+
+const filterBtns = document.querySelectorAll(".pill");
 
 filterBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -91,6 +118,8 @@ function delayFilters(func, delay = 250) {
         timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
 }
+
+const searchInput = document.getElementById("search-input");
 
 searchInput.addEventListener("input", delayFilters(applyFilters, 250));
 
