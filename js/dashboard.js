@@ -123,6 +123,10 @@ async function boot() {
     }
 
     document.getElementById("user-name").textContent = data.session.user.user_metadata?.display_name || data.session.user.email
+    const rolerez = await fetch("/api/my-role", {headers: {Authorization: `Bearer ${data.session.access_token}`}});
+    const {role} = await rolerez.json();
+    document.querySelector(".role-badge").textContent = role.charAt(0).toUpperCase() + role.slice(1);
+
     
     loadLibrary();
     loadTopics();

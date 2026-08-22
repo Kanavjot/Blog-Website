@@ -41,6 +41,10 @@ async function loadPost() {
 
         await Bookmark(paper.id);
 
+        if (window.Prism) {
+            Prism.highlightAllUnder(cont);
+        }
+
         renderMath();
         renderCopybtn();
         buildTOC();

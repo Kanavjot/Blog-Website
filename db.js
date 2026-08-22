@@ -26,6 +26,8 @@ async function setup() {
     await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS content_html TEXT DEFAULT ''`);
     await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS citations TEXT DEFAULT ''`);
 
+
+
     await pool.query(
       `CREATE TABLE IF NOT EXISTS bookmarks (
         id SERIAL PRIMARY KEY,
@@ -56,6 +58,7 @@ async function setup() {
     role TEXT DEFAULT 'reader'
     )`);
 
+  await pool.query(`ALTER TABLE preferences ADD COLUMN IF NOT EXISTS date_format TEXT DEFAULT 'YYYY-MM-DD'`)  
   await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0`);
   await pool.query(`ALTER TABLE profiles ADD COLUMN IF NOT EXISTS display_name TEXT DEFAULT ''`);
   await pool.query(`ALTER TABLE papers ADD COLUMN IF NOT EXISTS published BOOLEAN DEFAULT true`)

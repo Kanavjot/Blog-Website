@@ -123,7 +123,7 @@ async function requireAdmin(req,res , next) {
 app.post("/api/ensure-profile" , requireReader , async(req , res) => {
     const name = req.body?.displayName || "";
     await db.query(`INSERT INTO profiles (id, display_name) VALUES ($1, $2)
-      ON CONFLICT (id) DO UPDATE SET display_name = COALESCE(NULLIF($2, ''))`, [req.userId , name]);
+      ON CONFLICT (id) DO UPDATE SET display_name = COALESCE(NULLIF($2, ''), profiles.display_name)`, [req.userId , name]);
 
     res.json({success :true});
 
@@ -145,6 +145,10 @@ app.put("/api/profile" , requireReader,async(req,res) => {
   res.json({success :true})
 });
 
+app.get("/api/my-role", requireReader, async(req,res) => {
+  const{rows} = await db.query("SELECT role FROM profiles WHERE id = $1", [req.userId]);
+  res.json({role :rows[0]?.role || "reader"});
+});
 
 /* papers*/
 
@@ -176,7 +180,7 @@ app.put("/api/papers/:id", requireAdmin, async(req, res) => {
   if(!title || !title.trim()) return res.status(400).json({error: "Title is required"});
 
   try {
-    const {rows} = await db.query(`UPDATE papers SET title=$1 , tag=$2 , difficulty=$3 , summary=$4 , read_time=$5, date=$6, content_html=$7, citations=$8 ,published=$9 WHERE id =$10 RETURNING *`,
+    const {rows} = await db.query(`UPDATE papers SET title=$1 , tags=$2 , difficulty=$3 , summary=$4 , read_time=$5, date=$6, content_html=$7, citations=$8 ,published=$9 WHERE id =$10 RETURNING *`,
       [title.trim(), tags.trim(), difficulty, summary || "" ,read_time || "", date || "", content_html || "",  citations || "" ,  published !== false, req.params.id] 
     );
     if (!rows.length) return res.status(404).json({error:"Couldn't find the paper"});
