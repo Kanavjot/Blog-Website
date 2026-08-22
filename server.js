@@ -137,6 +137,13 @@ app.get("/api/is-admin" , requireReader , async(req, res) => {
 
 });
 
+app.put("/api/profile" , requireReader,async(req,res) => {
+  const {displayName} = req.body;
+  if (!displayName || !displayName.trim()) return res.status(400).json({error: "Display name can't be empty"});
+
+  await db.query(`UPDATE profiles SET display_name = $1 WHERE id = $2`, [displayName.trim() ,req.userId]);
+  res.json({success :true})
+});
 
 
 /* papers*/

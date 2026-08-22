@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "UTF-8">
+        <title>Marginalia -- Profile</title>
+        <link rel = "stylesheet" href = "css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    </head>
+</html>
+
+<body>
+    <div class="page">
+        <div id = "site-header"></div>
+
+        <main class = "settings-wrap" style="display:block">
+            <h1>Profile</h1>
+
+            <section class = "settings-section">
+                <h2>Display Name</h2>
+                <form id="name-form">
+                    <input type = "text" id = "display-name" class="settings-input" placeholder = "Your new name">
+                    <button type="submit" class = "save-btn">Save</button>
+                </form> 
+                <p  id ="name-msg" class = "setting-msg"></p>
+            </section>
+
+            <section class ="settings-section">
+                <h2>Email</h2>
+                <p class = "settings-email-label" id = "current-email"></p>
+                <form id = "email-form">
+ 
+                    <input id = "new-emai" type = "email" placeholder="New Email" class = "settings-input" required>
+                    <button class = "save-btn" type = "submit">Update email</button>
+                </form>
+
+                <p id = "email-msg" class = "settings-msg"></p>
+            </section>
+
+            <section class = "settings-section">
+                <h2>Password</h2>
+                <form id=" "password-form>
+                    <input id = "new-password" placeholder = "New password(min 6 characters)" required minlength = "6" type = "password" class = "settings-input">
+                    <button class = "save-btn" type = "submit">Update password</button>
+                </form>
+                <p id = "password-msg" class = "settings-msg"></p>
+            </section>
+        </main>
+    </div>
+
+    <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src = "js/supabase-client.js"></script>
+    <script src = "js/nav.js"></script>
+    <script defer src = "js/main.js"></script>
+    <script src = "js/profiles.js"></script>
+</body>
