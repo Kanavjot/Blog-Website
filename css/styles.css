@@ -586,7 +586,6 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   background: var(--accent);
   color: var(--bg-raised);
   border: none;
-  border-radius: none;
   cursor: pointer;
   padding: 0.5rem;
   width: 100%;
@@ -671,7 +670,7 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
   display:grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  margin: 1.5rem 0 2 rem;
+  margin: 1.5rem 0 2rem;
 }
 
 .stat-card{
@@ -1024,7 +1023,7 @@ main {
   padding: 0.5rem 0 0.5rem 0.75rem;
 }
 .callout--synopsis .callout__label {color: var(--ink-faint);}
-.callout--synopsis p {font-family:var(--font-ui); color:var (--ink-soft);}
+.callout--synopsis p {font-family:var(--font-ui); color:var(--ink-soft);}
 .callout__label {
   font-family: var(--font-ui);
   font-size: 0.62rem;
@@ -1267,7 +1266,7 @@ code.inline {
   font-family: var(--font-ui);
   font-size: 0.9rem;
   color: var(--ink-faint);
-  padding:2rem , 0;
+  padding:2rem 0;
   text-align: center;
 }
 

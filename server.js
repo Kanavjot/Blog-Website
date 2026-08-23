@@ -1,5 +1,5 @@
 require('dotenv').config();
-const db = require('./db');
+const {pool: db , setup} =require('./db');
 const cors= require("cors");
 const express = require('express');
 const {createClient} = require('@supabase/supabase-js');
@@ -331,10 +331,14 @@ app.get("/api/admin/stats" , requireAdmin , async(req ,res) => {
     });
 })
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  setup().then(() => {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 })
+  
+}
 
 
-
+module.exports = app;

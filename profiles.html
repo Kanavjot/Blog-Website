@@ -7,7 +7,7 @@
         <link rel = "stylesheet" href = "css/styles.css">
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     </head>
-</html>
+
 
 <body>
     <div class="page">
@@ -22,7 +22,7 @@
                     <input type = "text" id = "display-name" class="settings-input" placeholder = "Your new name">
                     <button type="submit" class = "save-btn">Save</button>
                 </form> 
-                <p  id ="name-msg" class = "setting-msg"></p>
+                <p id ="name-msg" class = "setting-msg"></p>
             </section>
 
             <section class ="settings-section">
@@ -30,7 +30,7 @@
                 <p class = "settings-email-label" id = "current-email"></p>
                 <form id = "email-form">
  
-                    <input id = "new-emai" type = "email" placeholder="New Email" class = "settings-input" required>
+                    <input id = "new-email" type = "email" placeholder="New Email" class = "settings-input" required>
                     <button class = "save-btn" type = "submit">Update email</button>
                 </form>
 
@@ -39,7 +39,7 @@
 
             <section class = "settings-section">
                 <h2>Password</h2>
-                <form id=" "password-form>
+                <form id= "password-form">
                     <input id = "new-password" placeholder = "New password(min 6 characters)" required minlength = "6" type = "password" class = "settings-input">
                     <button class = "save-btn" type = "submit">Update password</button>
                 </form>
@@ -48,9 +48,10 @@
         </main>
     </div>
 
-    <script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script src = "js/supabase-client.js"></script>
     <script src = "js/nav.js"></script>
     <script defer src = "js/main.js"></script>
     <script src = "js/profiles.js"></script>
 </body>
+</html>

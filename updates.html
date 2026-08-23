@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marginalia — Updates</title>
+<title>Marginalia —Updates</title>
 <link rel="icon" href="/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,14 +23,33 @@
     <article class="post-main">
 
       <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.02</span>
+        <ul>
+          <li>Built a real Node.js + Express backend with a SQLite database</li>
+          <li>Connected the existing papers archive to a live GET API endpoint</li>
+          <li>Switched to a single-origin architecture to fix a CORS error (serving the frontend directly from Express)</li>
+        </ul>
+      </div>
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.07.31</span>
+        <ul>
+          <li>Studied and Built a small test Node.js + Express framework and locally tested it</li>
+        </ul>
+      </div>
+      
+
+      <div class = "update-entry">
         <span class = "update-entry__date">2026.07.28</span>
         <ul>
-          <li></li>
+          <li>Added a paper archive page</li>
+          <li>Added tag and difficulty filters along with a search bar</li>
+          <li>Fixed major bugs (windows env blockers)</li>
         </ul>
       </div>
 
       <div class="update-entry">
-        <span class="update-entry__date">2026.07.24</span>
+        <span class="update-entry__date">2026.07.26</span>
         <ul>
           <li>Added light/dark mode toggle with persistent theme memory</li>
           <li>Added table of contents with sticky positioning and collapsible subheadings</li>
@@ -43,15 +62,15 @@
       </div>
 
       <div class="update-entry">
-        <span class="update-entry__date">2026.07.20</span>
+        <span class="update-entry__date">2026.07.25</span>
         <ul>
           <li>Fixed file casing so the site renders correctly on Linux-based hosting</li>
-          <li>Converted the site to a dark theme and resolved resulting contrast bugs</li>
+          <li>Converted the site to a dark theme</li>
         </ul>
       </div>
 
       <div class="update-entry">
-        <span class="update-entry__date">2026.07.18</span>
+        <span class="update-entry__date">2026.07.24</span>
         <ul>
           <li>Built the initial site structure</li>
           <li>Added LaTeX math rendering, syntax-highlighted code, callouts, and citations</li>
@@ -66,7 +85,7 @@
   </footer>
 
 </div>
-<script src = "https://cdn.jsdelivr/npm/@supabase/supabase-js@2"></script>
+<script src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src = "js/supabase-client.js"></script>
 <script src = "js/nav.js"></script>
 <script src = "js/main.js"></script>

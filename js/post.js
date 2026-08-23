@@ -35,7 +35,7 @@ async function loadPost() {
         </div>
         <h1 class = "post-title">${paper.title}</h1>
         <p class = "post-source">${paper.summary}</p>
-        ${paper.content_html || "<p>No content added yet.</p>"}
+        ${cleanContent}
         ${citeHtml}
         <div class = "post-tags">${tagsHtml}</div>`;
 

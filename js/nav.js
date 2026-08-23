@@ -22,13 +22,13 @@ async function renderNav() {
     
     if (data.session) {
       readerLink = `<a href = "dashboard.html">My Account</a>`;
-      fetch("/api/ensure-profile", {
+      /* fetch("/api/ensure-profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${data.session.access_token}`},
           body: JSON.stringify({displayName: data.session.user.user_metadata?.display_name || ""})
-      }).then(r => r.json()).then(console.log).catch(console.error);
+      }).then(r => r.json()).then(console.log).catch(console.error); */
     }
   } catch (err) {
     console.error("session check failed", err);

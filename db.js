@@ -88,5 +88,5 @@ async function setup() {
   
 }
 
-setup().catch(console.error);
-module.exports = pool;
+
+module.exports = {pool, setup};
