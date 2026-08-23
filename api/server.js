@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {pool: db , setup} =require('./db');
+const {pool: db , setup} =require('../db');
 const cors= require("cors");
 const express = require('express');
 const {createClient} = require('@supabase/supabase-js');
