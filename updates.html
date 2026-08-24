@@ -22,27 +22,127 @@
   <main style="grid-template-columns: 1fr; max-width: 48rem;">
     <article class="post-main">
 
+
       <div class = "update-entry">
-        <span class = "update-entry__date"></span>
+        <span class = "update-entry__date">2026.08.24</span>
         <ul>
-          <li>Refer to Github Commits for Remaining updates.</li>
-          <li></li>
+          <li>Added day-by-day updates to update page from IRL diary</li>
+          <li>Wrote the README.md</li>
+        </ul>
+      </div>
+
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.23</span>
+        <ul>
+          <li>Migrated to Vercel</li>
+          <ul>
+            <li>Restructured backend into serverless functions by moving Express server to /api</li>
+            <li>Configured vercel.json routing to serve frontend pages and /api endpoints</li>
+          </ul>
+          <li>Added a profile editor page</li>
+          <li>Updated reader-dashboard to show user's actual role</li>
+          <li>Added a favicon</li>
+          <li>Major debugging across entire project architecture</li>
+        </ul>
+      </div>
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.22</span>
+        <ul>
+          <li>Added a preference based sorting system through tags</li>
+          <li>Added dynamic search through paper content</li>
+          <li>Added sanitization of content_html before rendering</li>
+        </ul>
+      </div>
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.21</span>
+        <ul>
+          <li>Created a dynamic header function</li>
+          <li>Fixed a token caching error</li>
+          <li>Finally fixed the admin login issue</li>
+          <li>Added the ability to delete notes from the reader dashboard</li>
+        </ul>
+      </div>
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.20</span>
+        <ul>
+          <li>Added a published status to admin editor to hide papers from readers util they're ready for viewing</li>
+          <li>Retired the link field</li>
+          <li>Added a route to edit existing papers by loading them in admin editor</li>
+          <li>Fixed user profile bugs</li>
+        </ul>
+      </div>
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.19</span>
+        <ul>
+          <li>Built the admin dashboard</li>
+          <li>Created a HTML cheatsheet for the TinyMCE editor in the admin page</li>
+          <li>Fixed major Admin login bugs</li>
+          <li>Fixed admin auth by awaiting Supabase session tokens</li>
+        </ul>
+      </div>
+
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.18</span>
+        <ul>
+          <li>Debugged the admin login page</li>
+          <li>Debugged the reader dashboard</li>
+          <li>Added citations criterion to papers db</li>
+        </ul>
+      </div>
+
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.17</span>
+        <ul>
+          <li>Worked on login-form and functionality</li>
+          <li>Worked on the reader login/auth</li>
+          <li>Modified the database/auth code and login files.</li>
+        </ul>
+      </div>
+
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.15</span>
+        <ul>
+          <li>Added custom inert buttons for KaTeX, code blocks and callout blocks in the TinyMCE editor</li>
+          <li>Added Citations parameter to admin page + paper db</li>
+        </ul>
+      </div>
+
+
+      <div class = "update-entry">
+        <span class = "update-entry__date">2026.08.14</span>
+        <ul>
+          <li>Finished the dynamic paper system (still needed to test it)</li>
+          <li>Built the reader-dashboard further</li>
+          <li>Added backend routes for the bookamrks, notes, preferences and admin stats</li>
+          <li>Added db support profiles and paper view counts</li>
+          <li>Shift towards JWT based auth</li>
+          <li>Cleaned up server.js</li>
         </ul>
       </div>
 
       <div class = "update-entry">
         <span class = "update-entry__date">2026.08.13</span>
         <ul>
-          <li></li>
           <li>Worked on a prototype of the dynamic paper-posting template trying to add full content from the admin page itself</li>
+          <li>Built the post page to dynamically render the papers dynamically instead of using hardcoded HTML</li>
         </ul>
       </div>
 
       <div class = "update-entry">
         <span class = "update-entry__date">2026.08.12</span>
         <ul>
-          <li>Cleaned up code for almost all files</li>
+          <li>Cleaned up code for almost all files (shifted to external css and js)</li>
           <li>Render the navbar on all pages through nav.js</li>
+          <li>Built the reader-login page</li>
+          <li>Built the reader dashboard</li>
         </ul>
       </div>
 
@@ -51,7 +151,10 @@
         <ul>
           <li>Debugged the admin.js</li>
           <li>Resolved IPv4 and IPv6 mismatch error between render and supabase</li>
+          <li>Started building the TinyMCE framework</li>
+          <li>Added a content_html criterion to admin page + paper db</li>
           <li>Added a few small animations and made better UI on the homepage</li>
+          <li>Made the homepage more functional</li>
         </ul>
       </div>
 
@@ -67,6 +170,7 @@
         <span class = "update-entry__date">2026.08.09</span>
         <ul>
           <li>Created a signup page</li>
+          <li>Began work on auth/user side of this site</li>
         </ul>
       </div>
 
@@ -83,6 +187,8 @@
         <span class = "update-entry__date">2026.08.07</span>
         <ul>
           <li>Made the homepage an actual page instead of it just showing a paper</li>
+          <li>Worked on database configuration</li>
+          <li>Worked on environement configuration</li>
         </ul>
       </div>
 
@@ -107,6 +213,7 @@
           <li>Added a DELETE endpoint</li>
           <li>Added delete buttons in the admin panel</li>
           <li>Added an about page</li>
+          <li>Continued fixing navbar issues</li>
         </ul>
       </div>
 
@@ -151,7 +258,7 @@
         <ul>
           <li>Added Updates page</li>
           <li>Added light/dark mode toggle with persistent theme memory</li>
-          <li>Added table of contents with sticky positioning and collapsible subheadings</li>
+          <li>Added a TOC with collapsible subheadings</li>
           <li>Added a reading progress bar</li>
           <li>Replaced hand-tagged code coloring with Prism.js syntax highlighting</li>
           <li>Added hoverable jargon tooltips</li>

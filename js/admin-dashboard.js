@@ -15,6 +15,6 @@ async function start() {
     `;
 
     document.getElementById("top-list").innerHTML = stats.topPapers
-    .map(p => `<li><span>${p.title}</span><span>${p.views} views</span></li>`).join("");
+    .map(p => `<li><span>${p.title}</span><span> ${p.views} views</span></li>`).join("");
 }
 start();
