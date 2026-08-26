@@ -8,7 +8,7 @@ See `updates.html` on the live site for the full, dated changelog.
 
 # Why I built this
 
-I read a lot of research papers and I often find them to be hard to understand at first. It would act as a polished notebook that I would use for noting down my understanding of the research paper. I was filling up too many notebooks, and it was getting more and more difficult to organize my notes. Marginalia is essentially a blog website about STEM research papers. It's part reading tool and part personal research log.
+I read a lot of research papers and I often find them to be hard to understand at first. I wanted something that would act as a polished notebook that I would use for noting down my understanding of the research paper. I was filling up too many notebooks, and it was getting more and more difficult to organize my notes. Marginalia is essentially a blog website about STEM research papers. It's part reading tool and part personal research log.
 
 
 # Features
@@ -53,8 +53,7 @@ I read a lot of research papers and I often find them to be hard to understand a
 **Steps**
 
 1) Clone the repository
-2) Install dependencies with `code` npm install `code`
-3) Configure environement varibles. You can copy the template for your `code`.env`code` file using the given `code`.env.example`code` file in the directory.
-4) Run the project locally through `code`npx vercel dev`code`
-5) Visit `code`http://localhost:3000`code`
-
+2) Install dependencies with `npm install`
+3) Configure environment varibles. You can copy the template for your `.env` file using the given `.env.example` file in the directory.
+4) Run the project locally through `npx vercel dev`
+5) Visit `http://localhost:3000`
