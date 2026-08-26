@@ -250,7 +250,7 @@ tr:nth-child(even) { background-color: var(--bg-raised); }
 .hero__inner {
   max-width: 78rem;
   margin: 0 auto;
-  padding: 0 1.3rem;
+  padding: 0 0.75rem;
   display: flex;
   align-items: baseline;
   gap: 0.8rem;
@@ -854,6 +854,7 @@ main.admin-dash{
   font-family: var(--font-ui);
   padding:0.6rem;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .topic-toggle { 
