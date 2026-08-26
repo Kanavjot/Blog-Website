@@ -46,9 +46,9 @@ I read a lot of research papers and I often find them to be hard to understand a
 
 **Prerequisites**
 
-Install Node.js (v18 or higher)
-Install Git
-Have a Hosted PostgreSQL instance (Supabase) for db
+- Install Node.js (v18 or higher)
+- Install Git
+- Have a Hosted PostgreSQL instance (Supabase) for db
 
 **Steps**
 
